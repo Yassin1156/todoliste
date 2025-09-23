@@ -1,0 +1,40 @@
+.containerSidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100%;
+  background: #eee;
+}
+.material-icons {
+  vertical-align: middle; /* Icon in der Textlinie zentrieren */
+  font-size: 24px; /* Icon-Größe anpassen */
+  margin-right: 4px; /* Abstand zum Text */
+}
+.material-icons-outlined {
+  vertical-align: middle;
+  margin-left: 140px;
+}
+.sidebar_header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 277px;
+  height: 80px;
+  background-color: blue;
+}
+.sidebar_middle {
+  width: 277px;
+  height: 1024px;
+  background-color: rgb(11, 145, 235);
+}
+.suche {
+  width: 277px;
+}
+.side_Button {
+  transform: translate(20%);
+}
+
+.back {
+  transform: translateX(-100%);
+}

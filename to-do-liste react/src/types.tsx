@@ -1,6 +1,6 @@
 export type todo = {
   content: string,
-  id: number,
+  id:   string,
   done: boolean
 }
 
