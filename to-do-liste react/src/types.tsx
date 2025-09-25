@@ -38,3 +38,16 @@ export type TodoPageProps = {
   setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
   currentAccountIndex: number;
 };
+
+export type SidebarProps = {
+  currentAccount: {
+    email: string;
+    password: string;
+    projects: {
+      name: string;
+      todos: { content: string; id: string; done: boolean }[];
+    }[];
+  };
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};

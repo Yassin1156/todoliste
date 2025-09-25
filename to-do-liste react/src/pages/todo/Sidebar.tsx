@@ -1,34 +1,48 @@
 import { Link } from "react-router";
 import "./Sidebar.css";
-import { useState } from "react";
+import type { SidebarProps } from "../../types";
 
-export function Sidebar() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+
+export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen  }: SidebarProps) {
+  
 
   return (
     <>
-      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-  
-       <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"></link>
+      <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons"
+        rel="stylesheet"
+      />
 
-      <div className={`containerSidebar ${isSidebarOpen ? "": "back"}`}  >
+      <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+        rel="stylesheet"
+      ></link>
+
+      <div className={`containerSidebar ${isSidebarOpen ? "" : "back"}`}>
         <aside className="sidebar">
-          <div className="sidebar_header">
+          <div className="sidebar-header">
             <Link to="/">
               <span className="material-icons">account_circle</span>
-              Account
-            </Link  >
-            <button className="side_Button" 
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-                <span className="material-icons-outlined">menu</span>
+              {currentAccount.email}
+            </Link>
+            <button
+              className="side-Button"
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            >
+              <span className="material-icons-outlined">menu</span>
             </button>
           </div>
           <div className="sidebar_middle">
-            <form    action="/suche">
-              <input  className="suche"   type="search" placeholder="Aufgabe Suchen" />
-            </form> 
+            <form action="/suche">
+              <input
+                className="suche"
+                type="search"
+                placeholder="Aufgabe Suchen"
+              />
+            </form>
           </div>
-        </aside> 
+        </aside>
       </div>
     </>
   );

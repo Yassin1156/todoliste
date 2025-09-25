@@ -1,6 +1,7 @@
 import type { TodoPageProps } from "../../types";
 import { Sidebar } from "./Sidebar";
 import { useState } from "react";
+import "./todoPage.css";
 
 export function TodoPage({
   accounts,
@@ -11,6 +12,7 @@ export function TodoPage({
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
   const [isProjectSelected, setIsProjectSelected] = useState(false);
   const [todoText, setTodoText] = useState<string>("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
   const currentAccount = accounts[currentAccountIndex];
   const projects = currentAccount ? currentAccount.projects : [];
@@ -110,16 +112,18 @@ export function TodoPage({
     <>
       <title>ToDo Page</title>
 
-      <Sidebar />
+      <Sidebar currentAccount={currentAccount} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 
-      <div className="Todo">
+      <div className={`Todo ${isSidebarOpen ? ""  : "back"}`}>
         <div className="Todo-Header">
           {isProjectSelected ? (
-            <div>
-              <h1>{projects[currentProjectIndex].name}</h1>
-              <button onClick={() => setIsProjectSelected(false)}>
-                Projekt wechseln
-              </button>
+            <div className="header-row">
+              <h1>
+                {projects[currentProjectIndex].name}
+                <button className="wechsel-button" onClick={() => setIsProjectSelected(false)}>
+                  Projekt wechseln
+                </button>
+              </h1>
             </div>
           ) : (
             <h1>
@@ -129,7 +133,7 @@ export function TodoPage({
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
               />
-              <button onClick={addProject}>+</button>
+              <button className="addProject-button" onClick={addProject}>+</button>
             </h1>
           )}
         </div>

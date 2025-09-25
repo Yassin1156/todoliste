@@ -1,0 +1,45 @@
+body {
+  margin: 0; 
+  background: #ffffff;
+  color: #111827;
+  font-family: Arial, sans-serif;
+}
+
+.email-container p,
+.password-container p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+input,
+input {
+  flex: 1;               /* füllt die Zeile neben dem Label */
+  min-width: 0;
+  height: 40px;          /* gleiche Höhe wie Button */
+  padding: 0 10px;
+  background: #f9fafb;
+  color: #111827;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+button {
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  background: #334155;   /* dunkler Button wie Sidebar-Input */
+  color: #f1f5f9;        /* heller Text wie in der Sidebar */
+  cursor: pointer;
+  font-weight: 600;
+}
+
+button:hover { background: #0f172a; }
+
+.email-container input {
+  margin-left: 30px;
+}

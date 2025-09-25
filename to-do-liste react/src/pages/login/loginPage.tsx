@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import type { LoginPageProps } from "../../types";
+import "./loginPage.css";
 
 
 export function LoginPage({
