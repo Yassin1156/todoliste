@@ -7,21 +7,21 @@ export function RegistrationPage({
   accounts,
   setAccounts,
   setCurrentAccountIndex,
-  email,
-  setEmail,
+  userName,
+  setUserName,
   password,
   setPassword,
 }: RegistrationPageProps) {
   const navigate = useNavigate();
 
   const addAccount = () => {
-    const accountIndex = accounts.findIndex((a) => a.email === email);
+    const accountIndex = accounts.findIndex((a) => a.userName === userName);
 
     if (accountIndex >= 0) {
       alert("Es existiert bereits ein Account mit dieser Email");
     } else {
       setAccounts((account) => {
-        const updatedAccounts =[...account, { email, password, projects: [] }];
+        const updatedAccounts =[...account, { userName, password, projects: [] }];
         setCurrentAccountIndex(updatedAccounts.length - 1);
         return updatedAccounts;
       });
@@ -29,7 +29,7 @@ export function RegistrationPage({
       navigate("/todo");
     }
 
-    setEmail("");
+    setUserName("");
     setPassword("");
   };
 
@@ -41,13 +41,13 @@ export function RegistrationPage({
 
       <div className="email-container">
         <p>
-          email:{" "}
+          Benutzername:{" "}
           <input
-            type="email"
-            placeholder="Bitte Email eingeben"
+            type="text"
+            placeholder="Bitte den Benutzernamen eingeben"
             id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
           />
         </p>
       </div>

@@ -10,15 +10,15 @@ export type project = {
 };
 
 export type Account = {
-  email: string;
+  userName: string;
   password: string;
   projects: project[];
 };
 export type LoginPageProps = {
   accounts: Account[];
   setCurrentAccountIndex: React.Dispatch<React.SetStateAction<number>>;
-  email: string;
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  userName: string;
+  setUserName: React.Dispatch<React.SetStateAction<string>>;
   password: string;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -27,8 +27,8 @@ export type RegistrationPageProps = {
   accounts: Account[];
   setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
   setCurrentAccountIndex: React.Dispatch<React.SetStateAction<number>>;
-  email: string;
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  userName: string;
+  setUserName: React.Dispatch<React.SetStateAction<string>>;
   password: string;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -41,7 +41,7 @@ export type TodoPageProps = {
 
 export type SidebarProps = {
   currentAccount: {
-    email: string;
+    userName: string;
     password: string;
     projects: {
       name: string;

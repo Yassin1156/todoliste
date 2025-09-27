@@ -24,7 +24,7 @@ export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen  }: Sid
           <div className="sidebar-header">
             <Link to="/">
               <span className="material-icons">account_circle</span>
-              {currentAccount.email}
+              {currentAccount.userName}
             </Link>
             <button
               className="side-Button"

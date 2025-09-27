@@ -6,8 +6,8 @@ import "./loginPage.css";
 export function LoginPage({
   accounts,
   setCurrentAccountIndex,
-  email,
-  setEmail,
+  userName,
+  setUserName,
   password,
   setPassword,
 }: LoginPageProps) {
@@ -16,7 +16,7 @@ export function LoginPage({
   
 
   function loginAccount() {
-    const accountIndex = accounts.findIndex((a) => a.email === email);
+    const accountIndex = accounts.findIndex((a) => a.userName === userName);
 
     if (accountIndex !== -1) {
       setCurrentAccountIndex(accountIndex);
@@ -26,8 +26,8 @@ export function LoginPage({
       } else {
         alert("Falsches Passwort");
       }
-    } else{alert("Es existiert kein Account mit dieser Email");}
-    setEmail("");
+    } else{alert("Es existiert kein Account mit diesem Benutzernamen");}
+    setUserName("");
     setPassword("");
   }
   
@@ -40,13 +40,13 @@ export function LoginPage({
 
       <div className="email-container">
         <p>
-          email:{" "}
+          Benutzernamen:{" "}
           <input
-            type="email"
-            placeholder="Bitte Email eingeben"
+            type="text"
+            placeholder="Bitte den Benutzernamen eingeben"
             id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
           />
         </p>
       </div>

@@ -15,7 +15,7 @@ function App() {
     Number(localStorage.getItem("currentAccountIndex")) || 0
   );
 
-  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
   useEffect(() => {
@@ -36,8 +36,8 @@ function App() {
             <LoginPage
               accounts={accounts}
               setCurrentAccountIndex={setCurrentAccountIndex}
-              email={email}
-              setEmail={setEmail}
+              userName={userName}
+              setUserName={setUserName}
               password={password}
               setPassword={setPassword}
             />
@@ -54,8 +54,8 @@ function App() {
               accounts={accounts}
               setAccounts={setAccounts}
               setCurrentAccountIndex={setCurrentAccountIndex}
-              email={email}
-              setEmail={setEmail}
+              userName={userName}
+              setUserName={setUserName}
               password={password}
               setPassword={setPassword}
             />
