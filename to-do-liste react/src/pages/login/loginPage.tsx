@@ -36,40 +36,47 @@ export function LoginPage({
     <>
       <title>Login Page</title>
 
-      <h1>Hier einloggen</h1>
+      
+      
+      <div className="login-container">
+        <h1>Login</h1>
+        <div className="email-container">
+          <p className="text-p">
+            Benutzernamen: 
+          </p>
+          <p>
+            <input
+              type="text"
+              placeholder="Bitte den Benutzernamen eingeben"
+              id="email"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+            />
+          </p>
+        </div>
 
-      <div className="email-container">
+        <div className="password-container">
+          <p className="text-p">
+            Passwort:
+          </p>
+          <p>
+            <input
+              type="password"
+              placeholder="*******"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </p>
+        </div>
+
+        <button onClick={loginAccount}>Einloggen</button>
+
         <p>
-          Benutzernamen:{" "}
-          <input
-            type="text"
-            placeholder="Bitte den Benutzernamen eingeben"
-            id="email"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-          />
+          Noch keinen Account? Dann klicken sie auf {""}
+          <Link to="/registration">jetzt registrieren</Link>
         </p>
       </div>
-
-      <div className="password-container">
-        <p>
-          password:{" "}
-          <input
-            type="password"
-            placeholder="Bitte password eingeben"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </p>
-      </div>
-
-      <button onClick={loginAccount}>Einloggen</button>
-
-      <p>
-        Noch keinen Account? Dann klicken sie auf{" "}
-        <Link to="/registration">jetzt registrieren</Link>
-      </p>
     </>
   );
 }

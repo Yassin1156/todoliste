@@ -22,10 +22,8 @@ export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen  }: Sid
       <div className={`containerSidebar ${isSidebarOpen ? "" : "back"}`}>
         <aside className="sidebar">
           <div className="sidebar-header">
-            <Link to="/">
               <span className="material-icons">account_circle</span>
               {currentAccount.userName}
-            </Link>
             <button
               className="side-Button"
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -41,6 +39,9 @@ export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen  }: Sid
                 placeholder="Aufgabe Suchen"
               />
             </form>
+          </div>
+          <div className="sidebar-footer">
+              <Link className="ausloggen-link" to="/">Ausloggen</Link>
           </div>
         </aside>
       </div>

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import type { RegistrationPageProps } from "../../types";
+import "../login/loginPage.css";
 
 
 
@@ -26,7 +27,7 @@ export function RegistrationPage({
         return updatedAccounts;
       });
       console.log("Account erstellt");
-      navigate("/todo");
+      navigate("/");
     }
 
     setUserName("");
@@ -36,40 +37,44 @@ export function RegistrationPage({
   return (
     <>
       <title>Registration Page</title>
+      <div className="login-container">
+        <h1>Registration</h1>
+        <div className="email-container">
+          <p>
+            Benutzername:
+          </p>
+          <p>
+            <input
+              type="text"
+              placeholder="Bitte den Benutzernamen eingeben"
+              id="email"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+            />
+          </p>
+        </div>
 
-      <h1>Hier registrieren</h1>
+        <div className="password-container">
+          <p>
+            Passwort:
+          </p>
+          <p>
+            <input
+              type="password"
+              placeholder="********"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </p>
+        </div>
 
-      <div className="email-container">
+        <button onClick={addAccount}>Registrieren</button>
+
         <p>
-          Benutzername:{" "}
-          <input
-            type="text"
-            placeholder="Bitte den Benutzernamen eingeben"
-            id="email"
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-          />
+          Schon einen Account? Dann hier <Link to="/">einloggen</Link>
         </p>
       </div>
-
-      <div className="password-container">
-        <p>
-          password:{" "}
-          <input
-            type="password"
-            placeholder="Bitte password eingeben"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </p>
-      </div>
-
-      <button onClick={addAccount}>Registrieren</button>
-
-      <p>
-        Schon einen Account? Dann hier <Link to="/">einloggen</Link>
-      </p>
     </>
   );
 }

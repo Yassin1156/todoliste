@@ -5,12 +5,12 @@
   width: 220px;
   height: 100vh;
   background: #1e293b; /* dunkles Grau */
-  color: #f1f5f9;      /* sehr helles Grau für Text */
+  color: #f1f5f9; /* sehr helles Grau für Text */
   transition: transform 0.3s ease;
 }
 
-.containerSidebar.back { 
-  transform: translateX(-70%); 
+.containerSidebar.back {
+  transform: translateX(-70%);
 }
 
 .sidebar {
@@ -25,14 +25,14 @@
   justify-content: space-between;
   height: 80px;
   padding: 0 10px;
-  background: #0f172a; /* noch dunkleres Grau-Blau */
-  color: #f8fafc;      /* fast weißer Text */
+  background: #3a3a3a; /* noch dunkleres Grau-Blau */
+  color: #f8fafc; /* fast weißer Text */
   box-sizing: border-box;
 }
 
 .sidebar_middle {
   flex: 1;
-  background: #1e293b; /* gleiches Grundgrau */
+  background: #4a4a4a; /* gleiches Grundgrau */
   padding: 10px;
   box-sizing: border-box;
 }
@@ -66,3 +66,14 @@
   color: #f1f5f9;
 }
 
+.sidebar-footer {
+  margin-top: auto; /* schiebt Footer nach unten */
+  display: flex;
+  justify-content: center; /* zentriert horizontal */
+  padding: 20px 0; /* noch dunkleres Grau-Blau */
+  background-color: #4a4a4a;
+}
+
+.ausloggen-link {
+  color: white;
+}

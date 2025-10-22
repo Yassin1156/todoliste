@@ -1,9 +1,13 @@
 /* Seite neben der Sidebar */
+body{
+  background-color: #f3f3f3;
+}
+
+
 .Todo {
   margin-left: 220px;          /* Platz für Sidebar */
   min-height: 100vh;
-  padding: 16px;
-  background: #ffffff;         /* Weißer Hintergrund */
+  padding: 16px;       /* Weißer Hintergrund */
   color: #111827;              /* Dunkler Text */
   font:   Arial;
   width: 400px;
@@ -56,7 +60,6 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  background: #3b82f6;
   color: #fff;
   font-size: 14px;
   font-weight: 500;
@@ -108,12 +111,12 @@
 /* Farbvarianten */
 .Todo-Header button,
 .Todo-input button {
-  background: #3b82f6;   /* Blau */
+  background: #303030;   /* Blau */
   color: #ffffff;
 }
 .Todo-Header button:hover,
 .Todo-input button:hover {
-  background: #2563eb;   /* dunkleres Blau */
+  background: #404040;   /* dunkleres Blau */
 }
 
 /* Delete-Button */
@@ -163,7 +166,19 @@
   color: #6b7280;
 }
 
+.share-button {
+  align-self: center;           /* zentriert horizontal in Flex-Container */
+  margin-top: auto;                  
+  border: none;                 /* kein Rand */
+  cursor: pointer;              /* Hand-Cursor */
+  display: flex;                /* für zentriertes Icon */
+  justify-content: center;
+  align-items: center;
+  padding: 6px;                 /* etwas Klickfläche */
+}
+
 /* Responsive: Sidebar wegschieben */
 @media (max-width: 900px) {
   .Todo { margin-left: 0; }
 }
+

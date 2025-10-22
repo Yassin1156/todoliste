@@ -104,12 +104,32 @@ export function TodoPage({
 
     return updatedAccounts;
   });
+  };
+
+  const deleteProject = () => {
+    setAccounts((account) => {
+      const updatedAccounts = [...account];
+      const updatedProjects = updatedAccounts[currentAccountIndex].projects
+        .filter((_, index) => index !== currentProjectIndex);
+      updatedAccounts[currentAccountIndex] = {
+        ...updatedAccounts[currentAccountIndex],
+        projects: updatedProjects,
+      };
+      return updatedAccounts;
+    });
+    setIsProjectSelected(false);
+    setProjectName("");
+    setCurrentProjectIndex(0);
+    console.log("Projekt gelöscht");
+  
 };
 
     
 
   return (
     <>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
       <title>ToDo Page</title>
 
       <Sidebar currentAccount={currentAccount} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
@@ -123,6 +143,9 @@ export function TodoPage({
                 <button className="wechsel-button" onClick={() => setIsProjectSelected(false)}>
                   Projekt wechseln
                 </button>
+                <button onClick={
+                  deleteProject
+                }>Projekt löschen</button>
               </h1>
             </div>
           ) : (
@@ -166,6 +189,7 @@ export function TodoPage({
                   </div>
                 ))}
               </div>
+              <button className="share-button"><span className="material-icons">share</span></button>
             </div>
           )}
         </div>
