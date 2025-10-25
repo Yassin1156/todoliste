@@ -1,0 +1,15 @@
+.share-window-overlay {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  z-index: 1000;
+}
+
+.share-window {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  gap: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}

@@ -1,0 +1,21 @@
+.time-window-overlay {
+  position: fixed;
+  top: 6%;
+  left: 67%;
+  z-index: 1000;
+}
+
+.time-window {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  gap: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.time-input {
+  width: 50px;
+  margin-right: 5px;
+  margin-left: 5px;
+}

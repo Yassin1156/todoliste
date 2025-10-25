@@ -44,7 +44,7 @@ function App() {
           }
         />
         <Route
-          path="/todo"
+          path="/todo/:projectId"
           element={<TodoPage accounts={accounts} setAccounts={setAccounts} currentAccountIndex={currentAccountIndex} />}
         />
         <Route

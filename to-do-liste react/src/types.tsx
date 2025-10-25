@@ -1,10 +1,12 @@
 export type todo = {
   content: string,
   id:   string,
-  done: boolean
+  done: boolean,
+  deadline: string
 }
 
 export type project = {
+  id: string;
   name: string;
   todos: todo[];
 };
@@ -44,10 +46,26 @@ export type SidebarProps = {
     userName: string;
     password: string;
     projects: {
+      id: string;
       name: string;
       todos: { content: string; id: string; done: boolean }[];
     }[];
   };
   isSidebarOpen: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type SetTimeWindowProps = {
+  isTimeWindowOpem: boolean;
+  setIsTimeWindowOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  addTodo: () => void;
+  hours: string;
+  minutes: string;
+  setHours: React.Dispatch<React.SetStateAction<string>>;
+  setMinutes: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export type ShareWindowProps = {
+  isShareWindowOpen: boolean;
+  setIsShareWindowOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };

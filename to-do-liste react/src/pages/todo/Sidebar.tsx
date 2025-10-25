@@ -39,6 +39,13 @@ export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen  }: Sid
                 placeholder="Aufgabe Suchen"
               />
             </form>
+            {currentAccount.projects.map((project) => (
+              <div key={project.id} className="project-item">
+                <Link to={`/todo/${project.id}`} className="project-link">
+                  {project.name}
+                </Link>
+              </div>
+            ))}
           </div>
           <div className="sidebar-footer">
               <Link className="ausloggen-link" to="/">Ausloggen</Link>
