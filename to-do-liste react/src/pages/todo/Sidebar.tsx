@@ -4,7 +4,7 @@ import type { SidebarProps } from "../../types";
 
 
 
-export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen  }: SidebarProps) {
+export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen }: SidebarProps) {
   
 
   return (
@@ -39,13 +39,17 @@ export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen  }: Sid
                 placeholder="Aufgabe Suchen"
               />
             </form>
-            {currentAccount.projects.map((project) => (
-              <div key={project.id} className="project-item">
-                <Link to={`/todo/${project.id}`} className="project-link">
-                  {project.name}
-                </Link>
-              </div>
+            <ul className="project-list">
+              {currentAccount.projects.map((project) => (
+                <div key={project.id}>
+                  <li  className="project-item">
+                    <Link to={`/todo/${project.id}`} className="project-link">
+                      {project.name} 
+                    </Link>
+                  </li>
+                </div>
             ))}
+            </ul>
           </div>
           <div className="sidebar-footer">
               <Link className="ausloggen-link" to="/">Ausloggen</Link>

@@ -5,6 +5,8 @@ import { TodoPage } from "./pages/todo/todoPage";
 import { useState, useEffect } from "react";
 import { RegistrationPage } from "./pages/Registration/registrationPage";
 import type { Account } from "./types";
+import { ProjectPage } from "./pages/todo/projectPage";
+
 
 function App() {
   const [accounts, setAccounts] = useState<Account[]>(
@@ -18,6 +20,11 @@ function App() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+  const [isProjectSelected, setIsProjectSelected] = useState(false);
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
+  
+
   useEffect(() => {
     localStorage.setItem("accounts", JSON.stringify(accounts));
     localStorage.setItem(
@@ -26,6 +33,7 @@ function App() {
     );
     console.log("Daten im localStorage gespeichert");
   }, [accounts, currentAccountIndex]);
+
 
   return (
     <>
@@ -44,8 +52,12 @@ function App() {
           }
         />
         <Route
-          path="/todo/:projectId"
-          element={<TodoPage accounts={accounts} setAccounts={setAccounts} currentAccountIndex={currentAccountIndex} />}
+          path="/todo"
+          element={<TodoPage accounts={accounts} setAccounts={setAccounts} currentAccountIndex={currentAccountIndex} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} isProjectSelected={isProjectSelected} setIsProjectSelected={setIsProjectSelected} currentProjectIndex={currentProjectIndex} setCurrentProjectIndex={setCurrentProjectIndex} />}
+         />
+        <Route
+          path="/todo/:id"
+          element={<ProjectPage accounts={accounts} setAccounts={setAccounts} currentAccountIndex={currentAccountIndex} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}  setIsProjectSelected={setIsProjectSelected} currentProjectIndex={currentProjectIndex} setCurrentProjectIndex={setCurrentProjectIndex}  />}
         />
         <Route
           path="/registration"

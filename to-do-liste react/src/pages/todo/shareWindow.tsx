@@ -4,6 +4,7 @@ import "./shareWindow.css";
 export function ShareWindow({
   isShareWindowOpen,
   setIsShareWindowOpen,
+  shareLink
 }: ShareWindowProps) {
   return (
     <>
@@ -11,7 +12,7 @@ export function ShareWindow({
         <div className="share-window-overlay">
           <div className="share-window">
             <h2>Teile dein Projekt:</h2>
-            <p>Link zum Teilen:</p>
+            <p>{shareLink}</p>
             <button
               onClick={() => setIsShareWindowOpen(false)}
             >Schließen</button>

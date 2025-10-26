@@ -39,6 +39,12 @@ export type TodoPageProps = {
   accounts: Account[];
   setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
   currentAccountIndex: number;
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isProjectSelected: boolean;
+  setIsProjectSelected: React.Dispatch<React.SetStateAction<boolean>>;
+  currentProjectIndex: number;
+  setCurrentProjectIndex: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export type SidebarProps = {
@@ -53,6 +59,7 @@ export type SidebarProps = {
   };
   isSidebarOpen: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentProjectIndex?: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export type SetTimeWindowProps = {
@@ -68,4 +75,16 @@ export type SetTimeWindowProps = {
 export type ShareWindowProps = {
   isShareWindowOpen: boolean;
   setIsShareWindowOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  shareLink: string;
+};
+
+export type ProjectPageProps = {
+  accounts: Account[];
+  setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
+  currentAccountIndex: number;
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsProjectSelected: React.Dispatch<React.SetStateAction<boolean>>;
+  currentProjectIndex: number;
+  setCurrentProjectIndex: React.Dispatch<React.SetStateAction<number>>;
 };
