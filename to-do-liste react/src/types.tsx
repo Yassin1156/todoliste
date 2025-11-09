@@ -88,3 +88,8 @@ export type ProjectPageProps = {
   currentProjectIndex: number;
   setCurrentProjectIndex: React.Dispatch<React.SetStateAction<number>>;
 };
+
+export type FilterWindowProps = {
+  isFilterWindowOpen: boolean;
+  setIsFilterWindowOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};

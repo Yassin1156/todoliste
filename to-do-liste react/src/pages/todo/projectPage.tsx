@@ -8,6 +8,7 @@ dayjs.extend(duration);
 import { ShareWindow } from "./shareWindow";
 import "./todoPage.css";
 import { useNavigate, useParams } from "react-router-dom";
+import { FilterWindow } from "./filterWindow";
 
 export function ProjectPage({
   accounts,
@@ -25,12 +26,15 @@ export function ProjectPage({
   const [minutes, setMinutes] = useState<string>("");
   const [now, setNow] = useState(dayjs());
   const [isShareWindowOpen, setIsShareWindowOpen] = useState<boolean>(false);
+  const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
 
   const currentAccount = accounts[currentAccountIndex];
   const projects = currentAccount ? currentAccount.projects : [];
   const navigate = useNavigate();
   const { id } = useParams();
-  const shareLink = id ? `${window.location.origin}/todo/${id}` : window.location.href;
+  const shareLink = id
+    ? `${window.location.origin}/todo/${id}`
+    : window.location.href;
 
   useEffect(() => {
     const id = setInterval(() => setNow(dayjs()), 1000);
@@ -162,6 +166,8 @@ export function ProjectPage({
         setMinutes={setMinutes}
       />
 
+      <FilterWindow isFilterWindowOpen={isFilterWindowOpen} setIsFilterWindowOpen={setIsFilterWindowOpen} />
+
       <div className={`Todo ${isSidebarOpen ? "" : "back"}`}>
         <div className="Todo-Header">
           <div className="header-row">
@@ -180,7 +186,8 @@ export function ProjectPage({
             </h1>
           </div>
         </div>
-        <div className="Todo-main">
+
+        <div className="Todo-Content">
           <div className="Todo-main">
             <div className="Todo-input">
               <input
@@ -190,6 +197,11 @@ export function ProjectPage({
                 onChange={(e) => setTodoText(e.target.value)}
               />
               <button onClick={() => setIsTimeWindowOpen(true)}>+</button>
+            </div>
+            <div className="filter">
+              <button onClick={() => setIsFilterWindowOpen(true)}>
+                <span className="material-icons">filter_list</span>
+              </button>
             </div>
             <div className="Todo-list">
               {projects[currentProjectIndex].todos.map((todo) => {

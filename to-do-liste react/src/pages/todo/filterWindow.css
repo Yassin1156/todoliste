@@ -1,0 +1,48 @@
+.filter-window-overlay {
+  position: fixed;
+  top: 6%;
+  left: 67%;
+  z-index: 1000;
+}
+
+.filter-window {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  gap: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+/* Container (optional) */
+.filter-optionen {
+  font-size: 16px; /* steuert zugleich die Checkbox-Größe (1em) */
+}
+
+/* Liste ohne Punkte + sauberer Abstand */
+.filter-optionen ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Abstand zwischen Zeilen */
+  margin-bottom: 10px;
+}
+
+/* Zeilen: Checkbox + Text perfekt ausrichten */
+.filter-optionen li {
+  display: flex;
+  align-items: center;   /* vertikal zentriert */
+  gap: 0.6rem;           /* Abstand zwischen Box und Text */
+  line-height: 1.2;
+}
+
+/* Checkbox auf Textgröße bringen und sauber ausrichten */
+.filter-optionen input[type="checkbox"] {
+  inline-size: 1em;      /* Breite = Schriftgröße */
+  block-size: 1em;       /* Höhe = Schriftgröße */
+  margin: 0;             /* kein zusätzlicher Offset */
+  accent-color: #3b82f6; /* (optional) Farbe der Checkbox */
+}
+
