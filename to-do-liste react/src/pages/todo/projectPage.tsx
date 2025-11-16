@@ -1,4 +1,4 @@
-import type { ProjectPageProps } from "../../types";
+import type { ProjectPageProps, FilterKey } from "../../types";
 import { Sidebar } from "./Sidebar";
 import { SetTimeWindow } from "./setTimeWindow";
 import { useEffect, useState } from "react";
@@ -27,9 +27,11 @@ export function ProjectPage({
   const [now, setNow] = useState(dayjs());
   const [isShareWindowOpen, setIsShareWindowOpen] = useState<boolean>(false);
   const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
+  const [selected, setSelected] = useState<FilterKey>("alle");
 
   const currentAccount = accounts[currentAccountIndex];
   const projects = currentAccount ? currentAccount.projects : [];
+  const todos = projects[currentProjectIndex].todos;
   const navigate = useNavigate();
   const { id } = useParams();
   const shareLink = id
@@ -141,6 +143,19 @@ export function ProjectPage({
     console.log("Projekt gelöscht");
   };
 
+  const filteredTodos = todos.filter((todo) => {
+    if (selected === "alle") return true;
+    if (selected === "erledigt") return todo.done;
+    if (selected === "nichterledigt") return !todo.done;
+    if (selected === "faellig") {
+      const diffMin = dayjs(todo.deadline).diff(now, "minute");
+      return diffMin <= 0;
+    }
+    return true;
+  });
+
+
+
   return (
     <>
       <link
@@ -166,7 +181,7 @@ export function ProjectPage({
         setMinutes={setMinutes}
       />
 
-      <FilterWindow isFilterWindowOpen={isFilterWindowOpen} setIsFilterWindowOpen={setIsFilterWindowOpen} />
+      <FilterWindow isFilterWindowOpen={isFilterWindowOpen} setIsFilterWindowOpen={setIsFilterWindowOpen} selected={selected} setSelected={setSelected} />
 
       <div className={`Todo ${isSidebarOpen ? "" : "back"}`}>
         <div className="Todo-Header">
@@ -204,7 +219,7 @@ export function ProjectPage({
               </button>
             </div>
             <div className="Todo-list">
-              {projects[currentProjectIndex].todos.map((todo) => {
+              {filteredTodos.map((todo) => {
                 const deadline = dayjs(todo.deadline);
                 const remainingTime = deadline.diff(now);
                 const remainingDuration = dayjs.duration(remainingTime);

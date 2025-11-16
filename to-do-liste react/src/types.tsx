@@ -12,6 +12,7 @@ export type project = {
 };
 
 export type Account = {
+  id: string;
   userName: string;
   password: string;
   projects: project[];
@@ -89,7 +90,11 @@ export type ProjectPageProps = {
   setCurrentProjectIndex: React.Dispatch<React.SetStateAction<number>>;
 };
 
+export type FilterKey = 'alle' | 'erledigt' | 'nichterledigt' | 'faellig';
+
 export type FilterWindowProps = {
   isFilterWindowOpen: boolean;
   setIsFilterWindowOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  selected: FilterKey;
+  setSelected: React.Dispatch<React.SetStateAction<FilterKey>>;
 };

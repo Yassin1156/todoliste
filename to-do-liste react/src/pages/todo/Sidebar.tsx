@@ -1,12 +1,22 @@
 import { Link } from "react-router";
+import { useState } from "react";
 import "./Sidebar.css";
 import type { SidebarProps } from "../../types";
 
 
 
-export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen }: SidebarProps) {
-  
 
+export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen }: SidebarProps) {
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const projects = currentAccount.projects;
+
+  const filteredProjects = projects.filter((project) =>
+    project.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  
   return (
     <>
       <link
@@ -19,10 +29,13 @@ export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen }: Side
         rel="stylesheet"
       ></link>
 
+
       <div className={`containerSidebar ${isSidebarOpen ? "" : "back"}`}>
         <aside className="sidebar">
           <div className="sidebar-header">
-              <span className="material-icons">account_circle</span>
+              <span className="material-icons"
+                
+              >account_circle</span>
               {currentAccount.userName}
             <button
               className="side-Button"
@@ -32,15 +45,17 @@ export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen }: Side
             </button>
           </div>
           <div className="sidebar_middle">
-            <form action="/suche">
+            <form onSubmit={(e) => e.preventDefault()}>
               <input
                 className="suche"
                 type="search"
                 placeholder="Aufgabe Suchen"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </form>
             <ul className="project-list">
-              {currentAccount.projects.map((project) => (
+              { filteredProjects.map((project) => (
                 <div key={project.id}>
                   <li  className="project-item">
                     <Link to={`/todo/${project.id}`} className="project-link">

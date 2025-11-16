@@ -22,7 +22,7 @@ export function RegistrationPage({
       alert("Es existiert bereits ein Account mit dieser Email");
     } else {
       setAccounts((account) => {
-        const updatedAccounts =[...account, { userName, password, projects: [] }];
+        const updatedAccounts =[...account, { id: crypto.randomUUID(), userName, password, projects: [] }];
         setCurrentAccountIndex(updatedAccounts.length - 1);
         return updatedAccounts;
       });

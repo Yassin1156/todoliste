@@ -1,18 +1,15 @@
-import { useState } from "react";
-import type { FilterWindowProps } from "../../types";
+import type { FilterWindowProps} from "../../types";
 import "./filterWindow.css";
 
-type FilterKey = "erledigt" | "nichterledigt" | "fällig";
+
 
 export function FilterWindow(
-  { isFilterWindowOpen, setIsFilterWindowOpen }: FilterWindowProps
+  { 
+    isFilterWindowOpen, setIsFilterWindowOpen, selected, setSelected 
+  }: FilterWindowProps
 ) {
 
-  const [selected, setSelected] = useState<FilterKey | null>(null);
 
-  const toggle = (key:FilterKey) => {
-    setSelected(k => (k === key ? null : key));
-  };
 
   return(
     <>
@@ -23,23 +20,30 @@ export function FilterWindow(
             <div className="filter-optionen">
               <ul>
                 <li>
-                  <input type="checkbox"
+                  <input type="radio"
+                    checked={selected === "alle"}
+                    onChange={() => setSelected("alle")}
+                  />
+                  Alle
+                </li>
+                <li>
+                  <input type="radio"
                     checked={selected === "erledigt"}
-                    onChange={() => toggle("erledigt")}
+                    onChange={() => setSelected("erledigt")}
                   />
                   Erledigt 
                 </li>
                 <li>
-                  <input type="checkbox"
+                  <input type="radio"
                     checked={selected === "nichterledigt"}
-                    onChange={() => toggle("nichterledigt")}
+                    onChange={() => setSelected("nichterledigt")}
                   />
                   Nicht Erledigt
                 </li>
                 <li>
-                  <input type="checkbox"
-                    checked={selected === "fällig"}
-                    onChange={() => toggle("fällig")}
+                  <input type="radio"
+                    checked={selected === "faellig"}
+                    onChange={() => setSelected("faellig")}
                   />
                   Jetzt fällig
                 </li>
