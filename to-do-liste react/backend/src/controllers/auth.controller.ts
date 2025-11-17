@@ -38,3 +38,4 @@ export const register = (req: Request, res: Response) => {
 
   res.json({ message: 'Registrierung erfolgreich', username, id });
 };
+
