@@ -1,11 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import type { LoginPageProps } from "../../types";
+import api from "../../api/client";
 import "./loginPage.css";
 
 
 export function LoginPage({
-  accounts,
-  setCurrentAccountIndex,
   userName,
   setUserName,
   password,
@@ -15,19 +14,22 @@ export function LoginPage({
 
   
 
-  function loginAccount() {
-    const accountIndex = accounts.findIndex((a) => a.userName === userName);
+async  function loginAccount() {
+    try {
+      const res = await api.post("/auth/login", {
+        userName,
+        password,
+      });
+      const { accountId } = res.data;
 
-    if (accountIndex !== -1) {
-      setCurrentAccountIndex(accountIndex);
-      if (password === accounts[accountIndex].password) {
-        console.log("Erfolgreich eingeloggt");
-        navigate("/todo");
-      } else {
-        alert("Falsches Passwort");
-      }
-    } else{alert("Es existiert kein Account mit diesem Benutzernamen");}
-    setUserName("");
+      localStorage.setItem("accountId", accountId);
+
+      console.log("Erfolgreich eingeloggt:", res.data);
+      navigate("/todo");
+    } catch (error) {
+      console.error("Fehler beim Einloggen:", error);
+      alert("Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.");
+    }
     setPassword("");
   }
   

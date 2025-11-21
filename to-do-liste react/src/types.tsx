@@ -1,25 +1,9 @@
-export type todo = {
-  content: string,
-  id:   string,
-  done: boolean,
-  deadline: string
-}
-
 export type project = {
-  id: string;
+  id: number;
   name: string;
-  todos: todo[];
 };
 
-export type Account = {
-  id: string;
-  userName: string;
-  password: string;
-  projects: project[];
-};
 export type LoginPageProps = {
-  accounts: Account[];
-  setCurrentAccountIndex: React.Dispatch<React.SetStateAction<number>>;
   userName: string;
   setUserName: React.Dispatch<React.SetStateAction<string>>;
   password: string;
@@ -27,9 +11,6 @@ export type LoginPageProps = {
 };
 
 export type RegistrationPageProps = {
-  accounts: Account[];
-  setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
-  setCurrentAccountIndex: React.Dispatch<React.SetStateAction<number>>;
   userName: string;
   setUserName: React.Dispatch<React.SetStateAction<string>>;
   password: string;
@@ -37,30 +18,23 @@ export type RegistrationPageProps = {
 };
 
 export type TodoPageProps = {
-  accounts: Account[];
-  setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
-  currentAccountIndex: number;
   isSidebarOpen: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isProjectSelected: boolean;
   setIsProjectSelected: React.Dispatch<React.SetStateAction<boolean>>;
   currentProjectIndex: number;
   setCurrentProjectIndex: React.Dispatch<React.SetStateAction<number>>;
+  projects: project[];
+  setProjects: React.Dispatch<React.SetStateAction<project[]>>;
+  userName: string;
 };
 
 export type SidebarProps = {
-  currentAccount: {
-    userName: string;
-    password: string;
-    projects: {
-      id: string;
-      name: string;
-      todos: { content: string; id: string; done: boolean }[];
-    }[];
-  };
+  projects: project[];
   isSidebarOpen: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentProjectIndex?: React.Dispatch<React.SetStateAction<number>>;
+  userName: string;
 };
 
 export type SetTimeWindowProps = {
@@ -80,14 +54,14 @@ export type ShareWindowProps = {
 };
 
 export type ProjectPageProps = {
-  accounts: Account[];
-  setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
-  currentAccountIndex: number;
   isSidebarOpen: boolean;
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsProjectSelected: React.Dispatch<React.SetStateAction<boolean>>;
   currentProjectIndex: number;
   setCurrentProjectIndex: React.Dispatch<React.SetStateAction<number>>;
+  projects: project[];
+  setProjects: React.Dispatch<React.SetStateAction<project[]>>;
+  userName: string;
 };
 
 export type FilterKey = 'alle' | 'erledigt' | 'nichterledigt' | 'faellig';

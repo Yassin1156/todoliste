@@ -9,16 +9,17 @@ import { ShareWindow } from "./shareWindow";
 import "./todoPage.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { FilterWindow } from "./filterWindow";
+import api from "../../api/client";
 
 export function ProjectPage({
-  accounts,
-  currentAccountIndex,
-  setAccounts,
   setIsSidebarOpen,
   isSidebarOpen,
   setIsProjectSelected,
   currentProjectIndex,
   setCurrentProjectIndex,
+  projects,
+  setProjects,
+  userName,
 }: ProjectPageProps) {
   const [todoText, setTodoText] = useState<string>("");
   const [isTimeWindowOpem, setIsTimeWindowOpen] = useState<boolean>(false);
@@ -28,15 +29,36 @@ export function ProjectPage({
   const [isShareWindowOpen, setIsShareWindowOpen] = useState<boolean>(false);
   const [isFilterWindowOpen, setIsFilterWindowOpen] = useState<boolean>(false);
   const [selected, setSelected] = useState<FilterKey>("alle");
+  const [todos, setTodos] = useState<
+    { id: string; content: string; done: boolean; deadline: string }[]
+  >([]);
 
-  const currentAccount = accounts[currentAccountIndex];
-  const projects = currentAccount ? currentAccount.projects : [];
-  const todos = projects[currentProjectIndex].todos;
+//  const currentAccount = accounts[currentAccountIndex];
+  // const projects = currentAccount ? currentAccount.projects : [];
+ // const accountProjects = currentAccount ? currentAccount.projects : [];
+ // const todos = accountProjects[currentProjectIndex]?.todos ?? [];
+
+  //const todos = projects[currentProjectIndex].todos;
   const navigate = useNavigate();
   const { id } = useParams();
   const shareLink = id
     ? `${window.location.origin}/todo/${id}`
     : window.location.href;
+
+  useEffect(() => {
+    async function fetchTodos() {
+      try {
+        const res = await api.get("/todos", {
+          params: { projectId: id },
+        });
+        setTodos(res.data);
+      } catch (error) {
+        console.error("Fehler beim Laden der Todos:", error);
+      }
+    }
+    fetchTodos();
+  }, [id]);
+ 
 
   useEffect(() => {
     const id = setInterval(() => setNow(dayjs()), 1000);
@@ -45,102 +67,74 @@ export function ProjectPage({
 
   useEffect(() => {
     if (!id) return;
-    const index = projects.findIndex((p) => p.id === id);
+    const index = projects.findIndex((p) => p.id === Number(id));
     if (index >= 0) setCurrentProjectIndex(index);
   }, [id, projects, setCurrentProjectIndex]);
 
-  const addTodo = () => {
+  const addTodo = async () => {
     const deadline = dayjs()
       .add(Number(hours), "hour")
       .add(Number(minutes), "minute");
-    setAccounts((account) => {
-      const updatedAccounts = [...account];
-      updatedAccounts[currentAccountIndex].projects[
-        currentProjectIndex
-      ].todos.push({
+    try {
+      const res = await api.post("/todos", {
         content: todoText,
-        id: crypto.randomUUID(),
-        done: false,
-        deadline: deadline.toISOString(),
+        projectId: id,
+        deadline
       });
-      return updatedAccounts;
-    });
+      const newTodo = res.data;
+      setTodos((prevTodos) => [...prevTodos, newTodo]);
+      console.log("Todo hinzugefügt:", newTodo);
+    } catch (error) {
+      console.error("Fehler beim Hinzufügen des Todos:", error);
+    }
+
+
     setTodoText("");
     setIsTimeWindowOpen(false);
-    console.log("Todo hinzugefügt");
   };
 
-  const toggleTodoDone = (todoId: string) => {
-    setAccounts((account) => {
-      const updatedAccounts = [...account];
-      const updatedProjects = [
-        ...updatedAccounts[currentAccountIndex].projects,
-      ];
-      const updatedTodos = [...updatedProjects[currentProjectIndex].todos];
+  const toggleTodoDone = async (todoId: string) => {
+    try {
+      const todo = todos.find((t) => t.id === todoId);
+      if (!todo) return;
 
-      const todoIndex = updatedTodos.findIndex((t) => t.id === todoId);
-      if (todoIndex >= 0) {
-        updatedTodos[todoIndex] = {
-          ...updatedTodos[todoIndex],
-          done: !updatedTodos[todoIndex].done,
-        };
-      }
-
-      updatedProjects[currentProjectIndex] = {
-        ...updatedProjects[currentProjectIndex],
-        todos: updatedTodos,
-      };
-
-      updatedAccounts[currentAccountIndex] = {
-        ...updatedAccounts[currentAccountIndex],
-        projects: updatedProjects,
-      };
-
-      return updatedAccounts;
-    });
-  };
-
-  const deleteTodo = (todoId: string) => {
-    setAccounts((account) => {
-      const updatedAccounts = [...account];
-      const updatedProjects = [
-        ...updatedAccounts[currentAccountIndex].projects,
-      ];
-
-      const updatedTodos = updatedProjects[currentProjectIndex].todos.filter(
-        (t) => t.id !== todoId
+      const res = await api.put(`/todos/${todoId}`, {
+        done: !todo.done,
+      });
+      const updatedTodo = res.data;
+      setTodos((prevTodos) =>
+        prevTodos.map((t) => (t.id === todoId ? updatedTodo : t))
       );
-
-      updatedProjects[currentProjectIndex] = {
-        ...updatedProjects[currentProjectIndex],
-        todos: updatedTodos,
-      };
-
-      updatedAccounts[currentAccountIndex] = {
-        ...updatedAccounts[currentAccountIndex],
-        projects: updatedProjects,
-      };
-
-      return updatedAccounts;
-    });
+      console.log("Todo aktualisiert:", updatedTodo);
+    } catch (error) {
+      console.error("Fehler beim Aktualisieren des Todos:", error);
+    }
   };
 
-  const deleteProject = () => {
-    setAccounts((account) => {
-      const updatedAccounts = [...account];
-      const updatedProjects = updatedAccounts[
-        currentAccountIndex
-      ].projects.filter((_, index) => index !== currentProjectIndex);
-      updatedAccounts[currentAccountIndex] = {
-        ...updatedAccounts[currentAccountIndex],
-        projects: updatedProjects,
-      };
-      return updatedAccounts;
-    });
-    setIsProjectSelected(false);
-    setCurrentProjectIndex(0);
-    navigate("/todo");
-    console.log("Projekt gelöscht");
+  const deleteTodo = async (todoId: string) => {
+      try {
+      await api.delete(`/todos/${todoId}`);
+      setTodos((prevTodos) => prevTodos.filter((t) => t.id !== todoId));
+      console.log("Todo gelöscht:", todoId);
+    } catch (error) {
+      console.error("Fehler beim Löschen des Todos:", error);
+    }
+  };
+
+  const deleteProject = async () => {
+    const poject = projects[currentProjectIndex];
+    try {
+      await api.delete(`/projects/${poject.id}`);
+      setProjects((prevProjects) =>
+        prevProjects.filter((p) => p.id !== poject.id)
+      );
+      setIsProjectSelected(false);
+      setCurrentProjectIndex(0);
+      navigate("/todo");
+      console.log("Projekt gelöscht:", poject);
+    } catch (error) {
+      console.error("Fehler beim Löschen des Projekts:", error);
+    }
   };
 
   const filteredTodos = todos.filter((todo) => {
@@ -154,8 +148,6 @@ export function ProjectPage({
     return true;
   });
 
-
-
   return (
     <>
       <link
@@ -166,9 +158,10 @@ export function ProjectPage({
       <title>Project Page</title>
 
       <Sidebar
-        currentAccount={currentAccount}
+        projects={projects}
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
+        userName={userName}
       />
 
       <SetTimeWindow
@@ -181,13 +174,18 @@ export function ProjectPage({
         setMinutes={setMinutes}
       />
 
-      <FilterWindow isFilterWindowOpen={isFilterWindowOpen} setIsFilterWindowOpen={setIsFilterWindowOpen} selected={selected} setSelected={setSelected} />
+      <FilterWindow
+        isFilterWindowOpen={isFilterWindowOpen}
+        setIsFilterWindowOpen={setIsFilterWindowOpen}
+        selected={selected}
+        setSelected={setSelected}
+      />
 
       <div className={`Todo ${isSidebarOpen ? "" : "back"}`}>
         <div className="Todo-Header">
           <div className="header-row">
             <h1>
-              {projects[currentProjectIndex].name}
+              {projects[currentProjectIndex]?.name ?? "Projekt wird geladen..."}
               <button
                 className="wechsel-button"
                 onClick={() => {

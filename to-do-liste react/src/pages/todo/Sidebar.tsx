@@ -6,11 +6,10 @@ import type { SidebarProps } from "../../types";
 
 
 
-export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen }: SidebarProps) {
+export function Sidebar({projects, isSidebarOpen, setIsSidebarOpen, userName }: SidebarProps) {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  const projects = currentAccount.projects;
 
   const filteredProjects = projects.filter((project) =>
     project.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -36,7 +35,7 @@ export function Sidebar({ currentAccount,isSidebarOpen, setIsSidebarOpen }: Side
               <span className="material-icons"
                 
               >account_circle</span>
-              {currentAccount.userName}
+              {userName}
             <button
               className="side-Button"
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}

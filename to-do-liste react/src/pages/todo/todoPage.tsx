@@ -3,25 +3,27 @@ import "./todoPage.css";
 import { useState, useEffect } from "react";
 import type { TodoPageProps } from "../../types";
 import { useNavigate } from "react-router-dom";
+import api from "../../api/client";
 
 export function TodoPage({
-  accounts,
-  currentAccountIndex,
-  setAccounts,
   isSidebarOpen,
   setIsSidebarOpen,
   isProjectSelected,
   setIsProjectSelected,
   currentProjectIndex,
   setCurrentProjectIndex,
+  projects,
+  setProjects,
+  userName,
 }: TodoPageProps) {
   const [projectName, setProjectName] = useState<string>("");
-  const currentAccount = accounts[currentAccountIndex];
-  const projects = currentAccount ? currentAccount.projects : [];
+  
   const navigate = useNavigate();
 
+
+
   useEffect(() => {
-    if (isProjectSelected) {
+    if (isProjectSelected && projects[currentProjectIndex]) {
       navigate(`/todo/${projects[currentProjectIndex].id}`);
       console.log("Navigiere zum ausgewählten Projekt");
     } else {
@@ -29,34 +31,40 @@ export function TodoPage({
     }
   }, [isProjectSelected, currentProjectIndex,projects, navigate, ]);
 
-  const addProject = () => {
-    const projectIndex = projects.findIndex((p) => p.name === projectName);
-    if (projectIndex >= 0) {
-      setCurrentProjectIndex(projectIndex);
-      console.log("Projekt ausgewählt");
-    } else {
-      const newIndex = projects.length;
-      setAccounts((account) => {
-        const updatedAccounts = [...account];
-        updatedAccounts[currentAccountIndex].projects.push({
-          id: crypto.randomUUID(),
-          name: projectName,
-          todos: [],
-        });
-        return updatedAccounts;
-      });
-      setCurrentProjectIndex(newIndex);
-      console.log("Projekt erstellt");
+  const addProject = async () => {
+    const trimmedName = projectName.trim();
+    
+    const existingIndex = projects.findIndex((p) => p.name === trimmedName);
+    if (existingIndex >= 0) {
+      setCurrentProjectIndex(existingIndex);
+      setIsProjectSelected(true);
+      setProjectName("");
+      return;
     }
-    setIsProjectSelected(true);
+
+    try {
+      const accountId = localStorage.getItem("accountId");
+      const res = await api.post("/projects", {
+        name: trimmedName,
+        accountId
+      });
+      const newProject = res.data;
+      setProjects((prevProjects) => [...prevProjects, newProject]);
+      setProjectName("");
+      console.log("Projekt hinzugefügt:", newProject);
+      setIsProjectSelected(true);
+    } catch (error) {
+      console.error("Fehler beim Hinzufügen des Projekts:", error);
+    }
   };
 
   return (
     <>
       <Sidebar
-        currentAccount={currentAccount}
+        projects={projects}
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
+        userName={userName}
       />
 
       <div className={`Todo ${isSidebarOpen ? "" : "back"}`}>

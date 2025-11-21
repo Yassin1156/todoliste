@@ -1,13 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import type { RegistrationPageProps } from "../../types";
+import api from "../../api/client";
 import "../login/loginPage.css";
 
 
 
 export function RegistrationPage({
-  accounts,
-  setAccounts,
-  setCurrentAccountIndex,
   userName,
   setUserName,
   password,
@@ -15,21 +13,19 @@ export function RegistrationPage({
 }: RegistrationPageProps) {
   const navigate = useNavigate();
 
-  const addAccount = () => {
-    const accountIndex = accounts.findIndex((a) => a.userName === userName);
-
-    if (accountIndex >= 0) {
-      alert("Es existiert bereits ein Account mit dieser Email");
-    } else {
-      setAccounts((account) => {
-        const updatedAccounts =[...account, { id: crypto.randomUUID(), userName, password, projects: [] }];
-        setCurrentAccountIndex(updatedAccounts.length - 1);
-        return updatedAccounts;
+  const addAccount = async () => {
+    try {
+      const res = await api.post("/auth/register", {
+        userName,
+        password,
       });
-      console.log("Account erstellt");
+      console.log("Erfolgreich registriert:", res.data);
       navigate("/");
-    }
 
+    } catch (error) {
+      console.error("Fehler bei der Registrierung:", error);
+      alert("Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.");
+    }
     setUserName("");
     setPassword("");
   };

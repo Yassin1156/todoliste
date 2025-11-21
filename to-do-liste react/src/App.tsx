@@ -4,18 +4,13 @@ import { Route, Routes } from "react-router-dom";
 import { TodoPage } from "./pages/todo/todoPage";
 import { useState, useEffect } from "react";
 import { RegistrationPage } from "./pages/Registration/registrationPage";
-import type { Account } from "./types";
 import { ProjectPage } from "./pages/todo/projectPage";
-
+import api from "./api/client";
 
 function App() {
-  const [accounts, setAccounts] = useState<Account[]>(
-    JSON.parse(localStorage.getItem("accounts") || "[]")
-  );
+  const [projects, setProjects] = useState<{ id: number; name: string }[]>([]);
 
-  const [currentAccountIndex, setCurrentAccountIndex] = useState<number>(
-    Number(localStorage.getItem("currentAccountIndex")) || 0
-  );
+
 
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -23,16 +18,21 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   const [isProjectSelected, setIsProjectSelected] = useState(false);
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
-  
 
   useEffect(() => {
-    localStorage.setItem("accounts", JSON.stringify(accounts));
-    localStorage.setItem(
-      "currentAccountIndex",
-      JSON.stringify(currentAccountIndex)
-    );
-    console.log("Daten im localStorage gespeichert");
-  }, [accounts, currentAccountIndex]);
+    const accountId = localStorage.getItem("accountId");
+    async function fetchProjects() {
+      try {
+        const res = await api.get("/projects", {
+          params: { accountId },
+        });
+        setProjects(res.data);
+      } catch (error) {
+        console.error("Fehler beim Laden der Projekte:", error);
+      }
+    }
+    fetchProjects();
+  }, []);
 
 
   return (
@@ -42,8 +42,6 @@ function App() {
           index
           element={
             <LoginPage
-              accounts={accounts}
-              setCurrentAccountIndex={setCurrentAccountIndex}
               userName={userName}
               setUserName={setUserName}
               password={password}
@@ -53,19 +51,39 @@ function App() {
         />
         <Route
           path="/todo"
-          element={<TodoPage accounts={accounts} setAccounts={setAccounts} currentAccountIndex={currentAccountIndex} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} isProjectSelected={isProjectSelected} setIsProjectSelected={setIsProjectSelected} currentProjectIndex={currentProjectIndex} setCurrentProjectIndex={setCurrentProjectIndex} />}
-         />
+          element={
+            <TodoPage
+              isSidebarOpen={isSidebarOpen}
+              setIsSidebarOpen={setIsSidebarOpen}
+              isProjectSelected={isProjectSelected}
+              setIsProjectSelected={setIsProjectSelected}
+              currentProjectIndex={currentProjectIndex}
+              setCurrentProjectIndex={setCurrentProjectIndex}
+              projects={projects}
+              setProjects={setProjects}
+              userName={userName}
+            />
+          }
+        />
         <Route
           path="/todo/:id"
-          element={<ProjectPage accounts={accounts} setAccounts={setAccounts} currentAccountIndex={currentAccountIndex} isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen}  setIsProjectSelected={setIsProjectSelected} currentProjectIndex={currentProjectIndex} setCurrentProjectIndex={setCurrentProjectIndex}  />}
+          element={
+            <ProjectPage
+              isSidebarOpen={isSidebarOpen}
+              setIsSidebarOpen={setIsSidebarOpen}
+              setIsProjectSelected={setIsProjectSelected}
+              currentProjectIndex={currentProjectIndex}
+              setCurrentProjectIndex={setCurrentProjectIndex}
+              projects={projects}
+              setProjects={setProjects}
+              userName={userName}
+            />
+          }
         />
         <Route
           path="/registration"
           element={
             <RegistrationPage
-              accounts={accounts}
-              setAccounts={setAccounts}
-              setCurrentAccountIndex={setCurrentAccountIndex}
               userName={userName}
               setUserName={setUserName}
               password={password}
