@@ -9,6 +9,7 @@ export function LoginPage({
   setUserName,
   password,
   setPassword,
+  onLoginSuccess,
 }: LoginPageProps) {
   const navigate = useNavigate();
 
@@ -21,8 +22,8 @@ async  function loginAccount() {
         password,
       });
       const { accountId } = res.data;
+      onLoginSuccess(accountId, userName);
 
-      localStorage.setItem("accountId", accountId);
 
       console.log("Erfolgreich eingeloggt:", res.data);
       navigate("/todo");

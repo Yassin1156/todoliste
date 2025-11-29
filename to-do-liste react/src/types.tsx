@@ -1,5 +1,5 @@
 export type project = {
-  id: number;
+  id: string;
   name: string;
 };
 
@@ -8,6 +8,7 @@ export type LoginPageProps = {
   setUserName: React.Dispatch<React.SetStateAction<string>>;
   password: string;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
+  onLoginSuccess: (accountId: string, userName: string) => void;
 };
 
 export type RegistrationPageProps = {
@@ -27,6 +28,7 @@ export type TodoPageProps = {
   projects: project[];
   setProjects: React.Dispatch<React.SetStateAction<project[]>>;
   userName: string;
+  onLogout: () => void;
 };
 
 export type SidebarProps = {
@@ -35,6 +37,7 @@ export type SidebarProps = {
   setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentProjectIndex?: React.Dispatch<React.SetStateAction<number>>;
   userName: string;
+  onLogout: () => void;
 };
 
 export type SetTimeWindowProps = {
@@ -62,6 +65,7 @@ export type ProjectPageProps = {
   projects: project[];
   setProjects: React.Dispatch<React.SetStateAction<project[]>>;
   userName: string;
+  onLogout: () => void;
 };
 
 export type FilterKey = 'alle' | 'erledigt' | 'nichterledigt' | 'faellig';

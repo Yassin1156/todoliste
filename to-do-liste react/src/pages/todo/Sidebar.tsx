@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "./Sidebar.css";
 import type { SidebarProps } from "../../types";
@@ -6,7 +6,8 @@ import type { SidebarProps } from "../../types";
 
 
 
-export function Sidebar({projects, isSidebarOpen, setIsSidebarOpen, userName }: SidebarProps) {
+export function Sidebar({projects, isSidebarOpen, setIsSidebarOpen, userName, onLogout }: SidebarProps) {
+  const navigate = useNavigate();
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -14,6 +15,12 @@ export function Sidebar({projects, isSidebarOpen, setIsSidebarOpen, userName }: 
   const filteredProjects = projects.filter((project) =>
     project.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleLogout = () => {
+    onLogout();
+    navigate("/");
+    console.log("Ausgeloggt");
+  };
 
   
   return (
@@ -66,7 +73,7 @@ export function Sidebar({projects, isSidebarOpen, setIsSidebarOpen, userName }: 
             </ul>
           </div>
           <div className="sidebar-footer">
-              <Link className="ausloggen-link" to="/">Ausloggen</Link>
+              <button onClick={handleLogout} className="ausloggen-link" >Ausloggen</button>
           </div>
         </aside>
       </div>

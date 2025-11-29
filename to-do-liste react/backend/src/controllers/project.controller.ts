@@ -1,33 +1,50 @@
 import e, {Request , Response} from 'express';
+import crypto from 'crypto';
+import { Project } from '../models/project';
 
-const projects: { id: string; name: string; accountId: string }[] = [];
 
-export const getProjects = (req: Request, res: Response) => {
+
+export const getProjects = async (req: Request, res: Response) => {
   const accountId = req.query.accountId;
   if (!accountId) {
     return res.status(400).json({ error: "Account ID ist erforderlich." });
   }
 
-  const accountProjects = projects.filter(project => project.accountId === accountId);
-  res.json(accountProjects);
+  try {
+    const projects = await Project.find({ accountId });
+    res.json(projects);
+  } catch (error) {
+    res.status(500).json({ error: "Interner Serverfehler." });
+  }
 };
 
-export const createProject = (req: Request, res: Response) => {
+export const createProject = async (req: Request, res: Response) => {
   const { name, accountId } = req.body;
   if (!name || !accountId) {
     return res.status(400).json({ error: "Projektname und Account ID sind erforderlich." });
   }
-  const newProject = { id: crypto.randomUUID(), name, accountId };
-  projects.push(newProject);
-  res.status(201).json(newProject);
+  try {
+    const newProject = new Project({
+      id: crypto.randomUUID(),
+      name,
+      accountId,
+    });
+    await newProject.save();
+    res.status(201).json(newProject);
+  } catch (error) {
+    res.status(500).json({ error: "Interner Serverfehler." });
+  }
 };
 
-export const deleteProject = (req: Request, res: Response) => {
+export const deleteProject = async (req: Request, res: Response) => {
   const { projectId } = req.params;
-  const projectIndex = projects.findIndex(project => project.id === projectId);
-  if (projectIndex === -1) {
-    return res.status(404).json({ error: "Projekt nicht gefunden." });
+  try {
+    const deletedProject = await Project.findOneAndDelete({ id: projectId });
+    if (!deletedProject) {
+      return res.status(404).json({ error: "Projekt nicht gefunden." });
+    }
+    res.status(204).send();
+  } catch (error) {
+    res.status(500).json({ error: "Interner Serverfehler." });
   }
-  projects.splice(projectIndex, 1);
-  res.status(204).send();
 };

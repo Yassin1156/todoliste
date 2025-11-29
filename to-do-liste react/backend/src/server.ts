@@ -1,7 +1,17 @@
 // Nur zum starten des Servers notwendig
 import app from './app'; 
-const port = 3001;
+import dotenv from 'dotenv';
+import { connectDB } from './config/db';
+dotenv.config();
 
-app.listen(port, () => {
-  console.log(`Server läuft auf http://localhost:${port}`);
-});
+const port = process.env.PORT || 3001;
+
+
+const startServer = async () => {
+  await connectDB();
+  app.listen(port, () => {
+    console.log(`Server läuft auf http://localhost:${port}`);
+  });
+};
+
+startServer();

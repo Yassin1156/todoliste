@@ -15,6 +15,7 @@ export function TodoPage({
   projects,
   setProjects,
   userName,
+  onLogout,
 }: TodoPageProps) {
   const [projectName, setProjectName] = useState<string>("");
   
@@ -23,6 +24,9 @@ export function TodoPage({
 
 
   useEffect(() => {
+    if (projects.length === 0) {
+    return;
+  }
     if (isProjectSelected && projects[currentProjectIndex]) {
       navigate(`/todo/${projects[currentProjectIndex].id}`);
       console.log("Navigiere zum ausgewählten Projekt");
@@ -53,6 +57,8 @@ export function TodoPage({
       setProjectName("");
       console.log("Projekt hinzugefügt:", newProject);
       setIsProjectSelected(true);
+      setCurrentProjectIndex(projects.length); // Neuer Index ist am Ende der Liste
+
     } catch (error) {
       console.error("Fehler beim Hinzufügen des Projekts:", error);
     }
@@ -65,6 +71,7 @@ export function TodoPage({
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         userName={userName}
+        onLogout={onLogout}
       />
 
       <div className={`Todo ${isSidebarOpen ? "" : "back"}`}>

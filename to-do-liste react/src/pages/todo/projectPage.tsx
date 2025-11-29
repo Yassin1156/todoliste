@@ -20,6 +20,7 @@ export function ProjectPage({
   projects,
   setProjects,
   userName,
+  onLogout,
 }: ProjectPageProps) {
   const [todoText, setTodoText] = useState<string>("");
   const [isTimeWindowOpem, setIsTimeWindowOpen] = useState<boolean>(false);
@@ -67,7 +68,7 @@ export function ProjectPage({
 
   useEffect(() => {
     if (!id) return;
-    const index = projects.findIndex((p) => p.id === Number(id));
+    const index = projects.findIndex((p) => p.id === id);
     if (index >= 0) setCurrentProjectIndex(index);
   }, [id, projects, setCurrentProjectIndex]);
 
@@ -162,6 +163,7 @@ export function ProjectPage({
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
         userName={userName}
+        onLogout={onLogout}
       />
 
       <SetTimeWindow

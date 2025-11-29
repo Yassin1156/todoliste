@@ -7,20 +7,40 @@ import { RegistrationPage } from "./pages/Registration/registrationPage";
 import { ProjectPage } from "./pages/todo/projectPage";
 import api from "./api/client";
 
+
+
+
 function App() {
-  const [projects, setProjects] = useState<{ id: number; name: string }[]>([]);
+  const [projects, setProjects] = useState<{ id: string; name: string }[]>([]);
+  const [accountId, setAccountId] = useState<string | null>(() =>
+    localStorage.getItem("accountId")
+  );
 
-
-
-  const [userName, setUserName] = useState("");
+  const [userName, setUserName] = useState<string>(() =>
+    localStorage.getItem("userName") || ""
+  );
   const [password, setPassword] = useState("");
 
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   const [isProjectSelected, setIsProjectSelected] = useState(false);
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
 
+  const handleLogout = () => {
+    localStorage.removeItem("accountId");
+    localStorage.removeItem("userName");
+    setAccountId(null);
+    setProjects([]);
+    setUserName("");
+    setPassword("");
+     
+  };
+
   useEffect(() => {
-    const accountId = localStorage.getItem("accountId");
+    if (!accountId) {
+      setProjects([]);
+      return;
+    }
+    
     async function fetchProjects() {
       try {
         const res = await api.get("/projects", {
@@ -32,7 +52,7 @@ function App() {
       }
     }
     fetchProjects();
-  }, []);
+  }, [accountId]);
 
 
   return (
@@ -46,6 +66,12 @@ function App() {
               setUserName={setUserName}
               password={password}
               setPassword={setPassword}
+              onLoginSuccess={(accountId: string, userName: string) => {
+                localStorage.setItem("accountId", accountId);
+                localStorage.setItem("userName", userName);
+                setAccountId(accountId);
+                setUserName(userName);
+              }}
             />
           }
         />
@@ -62,6 +88,7 @@ function App() {
               projects={projects}
               setProjects={setProjects}
               userName={userName}
+              onLogout={handleLogout}
             />
           }
         />
@@ -77,6 +104,7 @@ function App() {
               projects={projects}
               setProjects={setProjects}
               userName={userName}
+              onLogout={handleLogout}
             />
           }
         />
