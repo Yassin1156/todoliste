@@ -54,6 +54,7 @@ export type ShareWindowProps = {
   isShareWindowOpen: boolean;
   setIsShareWindowOpen: React.Dispatch<React.SetStateAction<boolean>>;
   shareLink: string;
+  projectId: string | undefined;
 };
 
 export type ProjectPageProps = {

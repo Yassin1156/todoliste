@@ -257,6 +257,7 @@ export function ProjectPage({
         isShareWindowOpen={isShareWindowOpen}
         setIsShareWindowOpen={setIsShareWindowOpen}
         shareLink={shareLink}
+        projectId={projects[currentProjectIndex]?.id}
       />
     </>
   );

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import crypto from "crypto";
 import { Todo } from "../models/todo";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
+import { Project } from "../models/project";
 
 
 
@@ -10,6 +11,9 @@ export const getTodos = async (req: AuthenticatedRequest, res: Response) => {
   if (!projectId) {
     return res.status(400).json({ error: "Project ID ist erforderlich." });
   }
+
+
+
   try {
     const todos = await Todo.find({ projectId });
     res.json(todos);
