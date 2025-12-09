@@ -26,6 +26,7 @@ function App() {
   const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
     localStorage.removeItem("accountId");
     localStorage.removeItem("userName");
     setAccountId(null);
@@ -43,7 +44,7 @@ function App() {
     
     async function fetchProjects() {
       try {
-        const res = await api.get("/projects", {
+        const res = await api.get("/projects",{
           params: { accountId },
         });
         setProjects(res.data);

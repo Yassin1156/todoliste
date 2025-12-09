@@ -21,8 +21,9 @@ async  function loginAccount() {
         userName,
         password,
       });
-      const { accountId } = res.data;
-      onLoginSuccess(accountId, userName);
+      const { account, token } = res.data;
+      localStorage.setItem("token", token);
+      onLoginSuccess(account.id, account.userName);
 
 
       console.log("Erfolgreich eingeloggt:", res.data);

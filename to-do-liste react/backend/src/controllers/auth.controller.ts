@@ -2,6 +2,9 @@
 import { Request, Response } from 'express';
 import crypto from 'crypto';
 import { Account } from '../models/account';
+import jwt from 'jsonwebtoken';
+
+
 
 
 
@@ -17,7 +20,17 @@ export const login = async (req: Request, res: Response) => {
     if (!account) {
       return res.status(401).json({ error: "Ungültiger Benutzername oder Passwort." });
     }
-    res.json({ message: 'Login erfolgreich', accountId: account.id });
+    const payload = { accountId: account.id, userName: account.userName };
+    const JWT_SECRET = process.env.JWT_SECRET;
+
+    if (!JWT_SECRET) {
+      throw new Error("JWT_SECRET environment variable is missing!");
+    }
+
+    const token = jwt.sign(payload, JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    res.status(200).json({ account, token });
   } catch (error) {
     res.status(500).json({ error: "Interner Serverfehler." });
   }

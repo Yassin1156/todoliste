@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
 import { Todo } from "../models/todo";
+import { AuthenticatedRequest } from "../middleware/auth.middleware";
 
 
 
-export const getTodos = async (req: Request, res: Response) => {
+export const getTodos = async (req: AuthenticatedRequest, res: Response) => {
   const projectId = req.query.projectId;
   if (!projectId) {
     return res.status(400).json({ error: "Project ID ist erforderlich." });

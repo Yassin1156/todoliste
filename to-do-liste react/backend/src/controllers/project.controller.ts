@@ -1,11 +1,12 @@
 import e, {Request , Response} from 'express';
 import crypto from 'crypto';
 import { Project } from '../models/project';
+import { AuthenticatedRequest } from '../middleware/auth.middleware';
 
 
 
-export const getProjects = async (req: Request, res: Response) => {
-  const accountId = req.query.accountId;
+export const getProjects = async (req: AuthenticatedRequest, res: Response) => {
+  const accountId = req.user?.accountId;
   if (!accountId) {
     return res.status(400).json({ error: "Account ID ist erforderlich." });
   }
@@ -18,8 +19,9 @@ export const getProjects = async (req: Request, res: Response) => {
   }
 };
 
-export const createProject = async (req: Request, res: Response) => {
-  const { name, accountId } = req.body;
+export const createProject = async (req: AuthenticatedRequest, res: Response) => {
+  const { name } = req.body;
+  const accountId = req.user?.accountId;
   if (!name || !accountId) {
     return res.status(400).json({ error: "Projektname und Account ID sind erforderlich." });
   }

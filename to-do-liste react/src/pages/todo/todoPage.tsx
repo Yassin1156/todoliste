@@ -50,7 +50,7 @@ export function TodoPage({
       const accountId = localStorage.getItem("accountId");
       const res = await api.post("/projects", {
         name: trimmedName,
-        accountId
+        accountId,
       });
       const newProject = res.data;
       setProjects((prevProjects) => [...prevProjects, newProject]);
