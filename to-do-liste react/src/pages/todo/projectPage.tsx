@@ -1,7 +1,7 @@
 import type { ProjectPageProps, FilterKey } from "../../types";
 import { Sidebar } from "./Sidebar";
 import { SetTimeWindow } from "./setTimeWindow";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 dayjs.extend(duration);
@@ -10,6 +10,7 @@ import "./todoPage.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { FilterWindow } from "./filterWindow";
 import api from "../../api/client";
+import { io, Socket } from "socket.io-client";
 
 export function ProjectPage({
   setIsSidebarOpen,
@@ -34,14 +35,15 @@ export function ProjectPage({
     { id: string; content: string; done: boolean; deadline: string }[]
   >([]);
 
-//  const currentAccount = accounts[currentAccountIndex];
+  //  const currentAccount = accounts[currentAccountIndex];
   // const projects = currentAccount ? currentAccount.projects : [];
- // const accountProjects = currentAccount ? currentAccount.projects : [];
- // const todos = accountProjects[currentProjectIndex]?.todos ?? [];
+  // const accountProjects = currentAccount ? currentAccount.projects : [];
+  // const todos = accountProjects[currentProjectIndex]?.todos ?? [];
 
   //const todos = projects[currentProjectIndex].todos;
   const navigate = useNavigate();
   const { id } = useParams();
+  const socketRef = useRef<Socket | null>(null);
   const shareLink = id
     ? `${window.location.origin}/todo/${id}`
     : window.location.href;
@@ -59,7 +61,6 @@ export function ProjectPage({
     }
     fetchTodos();
   }, [id]);
- 
 
   useEffect(() => {
     const id = setInterval(() => setNow(dayjs()), 1000);
@@ -72,6 +73,61 @@ export function ProjectPage({
     if (index >= 0) setCurrentProjectIndex(index);
   }, [id, projects, setCurrentProjectIndex]);
 
+  useEffect(() => {
+    if (!id) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.warn("Kein Token vorhanden, Socket wird nicht verbunden.");
+      return;
+    }
+
+    const socket = io("http://localhost:3001", {
+      auth: { token },
+    });
+
+    socketRef.current = socket;
+
+    socket.emit("joinProject", id);
+
+    socket.on("connect", () => {
+      console.log("Socket verbunden, id=", socket.id);
+    });
+
+    socket.on("todo:created", (newTodo) => {
+      console.log("event todo:created", newTodo);
+      setTodos((prev) => {
+        // wenn Todo schon existiert → nichts tun
+        if (prev.some((t) => t.id === newTodo.id)) {
+          return prev;
+        }
+        return [...prev, newTodo];
+      });
+    });
+
+    socket.on("todo:updated", (updatedTodo) => {
+      console.log("event todo:updated", updatedTodo);
+      setTodos((prev) =>
+        prev.map((t) => (t.id === updatedTodo.id ? updatedTodo : t))
+      );
+    });
+
+    socket.on("todo:deleted", (deletedTodo) => {
+      console.log("event todo:deleted", deletedTodo);
+      setTodos((prev) => prev.filter((t) => t.id !== deletedTodo.id));
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Socket disconnected");
+    });
+
+    return () => {
+      socket.emit("leaveProject", id);
+      socket.disconnect();
+      socketRef.current = null;
+    };
+  }, [id]);
+
   const addTodo = async () => {
     const deadline = dayjs()
       .add(Number(hours), "hour")
@@ -80,15 +136,14 @@ export function ProjectPage({
       const res = await api.post("/todos", {
         content: todoText,
         projectId: id,
-        deadline
+        deadline,
       });
       const newTodo = res.data;
-      setTodos((prevTodos) => [...prevTodos, newTodo]);
+     
       console.log("Todo hinzugefügt:", newTodo);
     } catch (error) {
       console.error("Fehler beim Hinzufügen des Todos:", error);
     }
-
 
     setTodoText("");
     setIsTimeWindowOpen(false);
@@ -113,7 +168,7 @@ export function ProjectPage({
   };
 
   const deleteTodo = async (todoId: string) => {
-      try {
+    try {
       await api.delete(`/todos/${todoId}`);
       setTodos((prevTodos) => prevTodos.filter((t) => t.id !== todoId));
       console.log("Todo gelöscht:", todoId);

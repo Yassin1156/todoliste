@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { Todo } from "../models/todo";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
 import { Project } from "../models/project";
+import { io } from "../server";
 
 
 
@@ -31,6 +32,8 @@ export const createTodo = async (req: Request, res: Response) => {
     const newTodo = new Todo({ id: crypto.randomUUID(), content, done: false, deadline, projectId });
     await newTodo.save();
     res.status(201).json(newTodo);
+
+     io.to(`project:${projectId}`).emit("todo:created", newTodo);
   } catch (error) {
     res.status(500).json({ error: "Interner Serverfehler." });
   }
@@ -44,6 +47,8 @@ export const deleteTodo = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Todo nicht gefunden." });
     }
     res.status(204).send();
+
+    io.to(`project:${deletedTodo.projectId}`).emit("todo:deleted", deletedTodo);
   } catch (error) {
     res.status(500).json({ error: "Interner Serverfehler." });
   }
@@ -58,6 +63,8 @@ export const updateTodo = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Todo nicht gefunden." });
     }
     res.json(updatedTodo);
+
+    io.to(`project:${updatedTodo.projectId}`).emit("todo:updated", updatedTodo);
   } catch (error) {
     res.status(500).json({ error: "Interner Serverfehler." });
   }
