@@ -1,20 +1,22 @@
 // Nur zum starten des Servers notwendig
-import app from "./app";
 import dotenv from "dotenv";
+dotenv.config();
+import app from "./app";
 import { connectDB } from "./config/db";
 import http from "http";
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
 import { JwtPayload } from "./middleware/auth.middleware";
 import { authMiddleware } from "./middleware/auth.middleware";
+import { startTodoReminderScheduler } from "./scheduler/todoReminder";
 
-dotenv.config();
+
 
 const port = process.env.PORT || 3001;
 
 const httpServer = http.createServer(app);
 
-export const io = new Server(httpServer, {
+export const io = new Server(httpServer, { //Socket.io Server initialisieren
   cors: {
     origin: "http://localhost:5173",
     methods: ["GET", "POST"],
@@ -43,7 +45,7 @@ io.use((socket, next) => {
 });
 
 // Events: Project-Räume joinen/leaven
-io.on("connection", (socket) => {
+io.on("connection", (socket) => { //Wenn sich ein Client verbindet - Socket = einzelner Browser
   const user = (socket as any).user;
   console.log("Socket verbunden:", user);
 
@@ -60,9 +62,13 @@ io.on("connection", (socket) => {
 
 const startServer = async () => {
   await connectDB();
+  startTodoReminderScheduler();
   httpServer.listen(port, () => {
     console.log(`Server läuft auf http://localhost:${port}`);
   });
 };
 
 startServer();
+
+
+

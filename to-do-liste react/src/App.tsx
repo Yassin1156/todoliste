@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { RegistrationPage } from "./pages/Registration/registrationPage";
 import { ProjectPage } from "./pages/todo/projectPage";
 import api from "./api/client";
+import { subscribeToPush } from "./push/subscribeToPush";
 
 
 
@@ -72,6 +73,7 @@ function App() {
                 localStorage.setItem("userName", userName);
                 setAccountId(accountId);
                 setUserName(userName);
+                subscribeToPush(import.meta.env.VITE_VAPID_PUBLIC_KEY);
               }}
             />
           }

@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import crypto from "crypto";
 import { Todo } from "../models/todo";
 import { AuthenticatedRequest } from "../middleware/auth.middleware";
-import { Project } from "../models/project";
 import { io } from "../server";
 
 
@@ -33,7 +32,7 @@ export const createTodo = async (req: Request, res: Response) => {
     await newTodo.save();
     res.status(201).json(newTodo);
 
-     io.to(`project:${projectId}`).emit("todo:created", newTodo);
+     io.to(`project:${projectId}`).emit("todo:created", newTodo); //Sende die neue Todo an alle Clients im entsprechenden Projekt-Raum
   } catch (error) {
     res.status(500).json({ error: "Interner Serverfehler." });
   }

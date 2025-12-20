@@ -1,0 +1,41 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: todo-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: todo-backend
+    env_file:
+      - ./backend/.env
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongo
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    # wichtig: Backend muss Mongo über Service-Namen erreichen
+    # setz in backend/.env: MONGO_URI=mongodb://mongo:27017/<db>
+
+  frontend:
+    build: .
+    container_name: todo-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+
+volumes:
+  mongo_data:

@@ -10,7 +10,7 @@ if (!mongoURI) {
 
 export const connectDB = async () => {
   try {
-    await mongoose.connect(mongoURI);
+    await mongoose.connect(mongoURI);  //Verbinde dich mit der MongoDB-Datenbank und speichere alles dort.
     console.log('MongoDB connected successfully');
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);

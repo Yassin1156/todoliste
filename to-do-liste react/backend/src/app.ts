@@ -3,6 +3,7 @@ import authRouter from './routes/auth.routes';
 import projectRouter from './routes/project.routes';
 import todoRouter from './routes/todo.routes';
 import cors from 'cors';
+import pushRouter from './routes/push.routes';
 
 
 
@@ -24,6 +25,7 @@ app.use(express.json()); // Middleware zum Parsen von JSON-Anfragen
 app.use("/api/auth", authRouter); // Bei Anfragen an /api/auth werden die authRouter verwendet
 app.use("/api/projects", projectRouter); 
 app.use("/api/todos", todoRouter);
+app.use("/api/push", pushRouter);
 
 
 

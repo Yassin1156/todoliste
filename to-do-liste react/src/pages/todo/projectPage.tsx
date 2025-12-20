@@ -163,11 +163,11 @@ export function ProjectPage({
       return;
     }
 
-    const socket = io("http://localhost:3001", {
+    const socket = io("http://localhost:3001", { //öffne die dauerhafte Verbindung zum Socket.io Server im Backend
       auth: { token },
     });
 
-    socketRef.current = socket;
+    socketRef.current = socket; //Socket in Ref speichern
 
     socket.emit("joinProject", id);
 
