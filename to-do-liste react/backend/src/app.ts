@@ -12,7 +12,11 @@ const app = express();
 
 app.use(cors(
   {
-    origin: 'http://localhost:5173', // Erlaube Anfragen von diesem Ursprung
+    origin: [
+      'http://localhost:5173',
+      'http://localhost:8081',
+      'http://127.0.0.1:8081'
+    ], // Erlaube Anfragen von diesem Ursprung
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Erlaube diese HTTP-Methoden
     allowedHeaders: ['Content-Type', 'Authorization'], // Erlaube das Senden von Cookies
   }
