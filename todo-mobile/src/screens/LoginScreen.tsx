@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert, Pressable } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { useState } from "react";
 import { api } from "../api/client";
 import { saveToken } from "../auth/tokenStorage";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -14,16 +14,18 @@ export default function LoginScreen({ navigation }: Props) {
   const login = async () => {
     try {
       const res = await api.post("/auth/login", { userName, password });
-
-      // dein Backend liefert vermutlich token oder accessToken
       const token = res.data.token ?? res.data.accessToken;
-      if (token) await saveToken(token);
 
+      if (!token) {
+        Alert.alert("Fehler", "Kein Token erhalten");
+        return;
+      }
+
+      await saveToken(token);
       Alert.alert("Login", "Erfolgreich eingeloggt!");
-      // später navigieren wir hier auf Projects – aber jetzt nur Login/Registration
+      // Navigation übernimmt AppNavigator automatisch
     } catch (error) {
-      console.error("Login Fehler:", error);
-      Alert.alert("Fehler", "Login fehlgeschlagen.");
+      Alert.alert("Fehler", "Login fehlgeschlagen");
     }
   };
 
@@ -48,17 +50,16 @@ export default function LoginScreen({ navigation }: Props) {
       />
 
       <Button title="Login" onPress={login} />
-
-      <Pressable onPress={() => navigation.navigate("Register")}>
-        <Text style={styles.link}>Noch keinen Account? Registrieren</Text>
-      </Pressable>
+      <Button
+        title="Registrieren"
+        onPress={() => navigation.navigate("Register")}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, justifyContent: "center", gap: 12 },
-  title: { fontSize: 26, fontWeight: "600", textAlign: "center", marginBottom: 12 },
-  input: { borderWidth: 1, borderColor: "#ccc", padding: 12, borderRadius: 10 },
-  link: { marginTop: 12, textAlign: "center", textDecorationLine: "underline" },
+  title: { fontSize: 26, fontWeight: "600", textAlign: "center" },
+  input: { borderWidth: 1, borderRadius: 8, padding: 12 },
 });
