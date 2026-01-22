@@ -2,6 +2,7 @@ import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 import { useState } from "react";
 import { api } from "../api/client";
 import { saveToken } from "../auth/tokenStorage";
+import { useAuth } from "../navigation/AppNavigator";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 
@@ -10,8 +11,9 @@ type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 export default function LoginScreen({ navigation }: Props) {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useAuth();
 
-  const login = async () => {
+  const loginHandler = async () => {
     try {
       const res = await api.post("/auth/login", { userName, password });
       const token = res.data.token ?? res.data.accessToken;
@@ -22,9 +24,8 @@ export default function LoginScreen({ navigation }: Props) {
       }
 
       await saveToken(token);
-      Alert.alert("Login", "Erfolgreich eingeloggt!");
-      // Navigation übernimmt AppNavigator automatisch
-    } catch (error) {
+      login(); // 🔥 DAS triggert die Navigation korrekt
+    } catch {
       Alert.alert("Fehler", "Login fehlgeschlagen");
     }
   };
@@ -49,7 +50,7 @@ export default function LoginScreen({ navigation }: Props) {
         secureTextEntry
       />
 
-      <Button title="Login" onPress={login} />
+      <Button title="Login" onPress={loginHandler} />
       <Button
         title="Registrieren"
         onPress={() => navigation.navigate("Register")}

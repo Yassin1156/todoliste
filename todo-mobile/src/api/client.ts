@@ -10,17 +10,17 @@ export const api = axios.create({
   timeout: 10000,
 });
 
-// Token automatisch anhängen (AUSSER Login/Register)
-api.interceptors.request.use(async (config) => {
-  if (
-    config.url &&
-    !config.url.includes("/auth/login") &&
-    !config.url.includes("/auth/register")
-  ) {
+ api.interceptors.request.use(async (config) => {
+  const isAuthRoute =
+    config.url?.includes("/auth/login") ||
+    config.url?.includes("/auth/register");
+
+  if (!isAuthRoute) {
     const token = await getToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
   }
+
   return config;
-});
+ }); 
