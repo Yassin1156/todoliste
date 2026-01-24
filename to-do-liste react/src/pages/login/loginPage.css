@@ -31,7 +31,7 @@ a {
 input,
 input {
   width: 310px;               
-  height: 40px;          /* gleiche Höhe wie Button */
+  height: 40px;          
   padding: 0 10px;
   background: #f9fafb;
   color: #111827;
@@ -46,8 +46,8 @@ button {
   padding: 0 14px;
   border: 1px solid #475569;
   border-radius: 6px;
-  background: #3a3a3a;   /* dunkler Button wie Sidebar-Input */
-  color: #f1f5f9;        /* heller Text wie in der Sidebar */
+  background: #3a3a3a;   
+  color: #f1f5f9;        
   cursor: pointer;
   font-weight: 600;
 }

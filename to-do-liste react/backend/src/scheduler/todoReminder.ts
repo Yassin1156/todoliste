@@ -1,10 +1,10 @@
-import dayjs from "dayjs";
+
 import { Todo } from "../models/todo";
 import { Project } from "../models/project";
 import { sendPushToAccount } from "../push/sendPush";
 
 export function startTodoReminderScheduler() {
-  console.log("⏰ Todo Reminder Scheduler gestartet");
+  console.log("Todo Reminder Scheduler gestartet");
 
   setInterval(async () => {
     const now = new Date();
@@ -20,24 +20,24 @@ export function startTodoReminderScheduler() {
       if (!project) continue;
 
       const payload = {
-        title: "⏰ Todo fällig",
+        title: "Todo fällig",
         body: todo.content,
         url: `http://localhost:5173/todo/${project.id}`,
       };
 
-      // 🔔 Owner
+      // Für den Besitzer des Projekts
       await sendPushToAccount(project.accountId, payload);
 
-      // 🔔 Shared Users
+      // Für geteilte Projekte
       if (Array.isArray(project.sharedWith)) {
         for (const accountId of project.sharedWith) {
           await sendPushToAccount(accountId, payload);
         }
       }
 
-      // markieren, damit nicht erneut gepusht wird
+      //Fälliges Todo als erinnert markieren
       todo.reminded = true;
       await todo.save();
     }
-  }, 30_000); // alle 30 Sekunden
+  }, 30000); // Jede Sekunde wird geprüft, ob Todos fällig sind
 }

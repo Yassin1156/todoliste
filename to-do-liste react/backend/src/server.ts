@@ -16,7 +16,7 @@ const port = process.env.PORT || 3001;
 
 const httpServer = http.createServer(app);
 
-export const io = new Server(httpServer, { //Socket.io Server initialisieren
+export const io = new Server(httpServer, { //Socket.io Server wird erstellt
   cors: {
     origin: "http://localhost:5173",
     methods: ["GET", "POST"],
@@ -25,7 +25,7 @@ export const io = new Server(httpServer, { //Socket.io Server initialisieren
 });
 
 io.use((socket, next) => {
-  const token = socket.handshake.auth?.token as string | undefined;
+  const token = socket.handshake.auth?.token as string | undefined; // Token aus den Socket-Handshake-Daten extrahieren
   if (!token) {
     return next(new Error("Kein Token übergeben"));
   }
@@ -44,8 +44,8 @@ io.use((socket, next) => {
   }
 });
 
-// Events: Project-Räume joinen/leaven
-io.on("connection", (socket) => { //Wenn sich ein Client verbindet - Socket = einzelner Browser
+// Diese Methode wird aufgerufen, wenn sich ein Client verbindet oder trennt (Wenn next() aufgerufen wird)
+io.on("connection", (socket) => { 
   const user = (socket as any).user;
   console.log("Socket verbunden:", user);
 

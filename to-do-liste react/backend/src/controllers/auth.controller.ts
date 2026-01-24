@@ -1,4 +1,4 @@
-// File zur Bearbeitung von Authentifizierungsanfragen
+
 import { Request, Response } from 'express';
 import crypto from 'crypto';
 import { Account } from '../models/account';

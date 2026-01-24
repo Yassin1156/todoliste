@@ -16,17 +16,17 @@ app.use(cors(
       'http://localhost:5173',
       'http://localhost:8081',
       'http://127.0.0.1:8081'
-    ], // Erlaube Anfragen von diesem Ursprung
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Erlaube diese HTTP-Methoden
-    allowedHeaders: ['Content-Type', 'Authorization'], // Erlaube das Senden von Cookies
+    ], // Erlaubt Anfragen von diesem Ursprung
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Erlaubt diese HTTP-Methoden
+    allowedHeaders: ['Content-Type', 'Authorization'], // Erlaubt das Senden von Cookies
   }
 ));
 
-app.use(express.json()); // Middleware zum Parsen von JSON-Anfragen
+app.use(express.json()); // Middleware zum Parsen von JSON-Anfragen (JSON Body lesen)
 
-// Routen für die Authentifizierung
 
-app.use("/api/auth", authRouter); // Bei Anfragen an /api/auth werden die authRouter verwendet
+
+app.use("/api/auth", authRouter); 
 app.use("/api/projects", projectRouter); 
 app.use("/api/todos", todoRouter);
 app.use("/api/push", pushRouter);

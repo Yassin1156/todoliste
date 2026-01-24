@@ -2,7 +2,7 @@ import {
   View,
   Text,
   TextInput,
-  Button,
+  Pressable,
   FlatList,
   StyleSheet,
   Alert,
@@ -13,6 +13,7 @@ import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 import { removeToken } from "../auth/tokenStorage";
 import { useAuth } from "../navigation/AppNavigator";
+import { colors } from "../theme/colors";
 
 
 type Props = NativeStackScreenProps<RootStackParamList, "Projects">;
@@ -25,7 +26,6 @@ type Project = {
 export default function ProjectsScreen({ navigation }: Props) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [projectName, setProjectName] = useState("");
-  const [loading, setLoading] = useState(true);
 
 
 
@@ -39,8 +39,6 @@ export default function ProjectsScreen({ navigation }: Props) {
       setProjects(res.data);
     } catch (error) {
       Alert.alert("Fehler", "Projekte konnten nicht geladen werden");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -73,61 +71,49 @@ const { logout } = useAuth();
     logout();
   };
 
-  if (loading) {
-    return (
-      <View style={styles.center}>
-        <Text>Lade Projekte…</Text>
-      </View>
-    );
-  }
 
-  return (
+
+   return (
     <View style={styles.container}>
-      {/* Inhalt */}
-      <View style={styles.content}>
-        <Text style={styles.title}>Deine Projekte</Text>
+      <Text style={styles.title}>Projekte</Text>
 
-        <View style={styles.row}>
-          <TextInput
-            style={styles.input}
-            placeholder="Neues Projekt"
-            value={projectName}
-            onChangeText={setProjectName}
-          />
-          <Button title="+" onPress={addProject} />
-        </View>
-
-        <FlatList
-          data={projects}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.projectRow}>
-              <Text
-                style={styles.projectName}
-                onPress={() =>
-                  navigation.navigate("Todos", {
-                    projectId: item.id,
-                    projectName: item.name,
-                  })
-                }
-              >
-                {item.name}
-              </Text>
-              <Button
-                title="X"
-                color="red"
-                onPress={() => deleteProject(item.id)}
-              />
-            </View>
-          )}
-          ListEmptyComponent={<Text>Keine Projekte vorhanden</Text>}
+      <View style={styles.row}>
+        <TextInput
+          style={styles.input}
+          placeholder="Neues Projekt"
+          value={projectName}
+          onChangeText={setProjectName}
         />
+        <Pressable style={styles.addButton} onPress={addProject}>
+          <Text style={styles.addButtonText}>+</Text>
+        </Pressable>
       </View>
 
-      {/* Logout etwas höher */}
-      <View style={styles.logoutContainer}>
-        <Button title="Logout" color="#cc0000" onPress={logoutHandler} />
-      </View>
+      <FlatList
+        data={projects}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <Pressable
+            style={styles.projectRow}
+            onPress={() =>
+              navigation.navigate("Todos", {
+                projectId: item.id,
+                projectName: item.name,
+              })
+            }
+            onLongPress={() => deleteProject(item.id)}
+          >
+            <Text style={styles.projectText}>{item.name}</Text>
+          </Pressable>
+        )}
+        ListEmptyComponent={
+          <Text style={styles.empty}>Keine Projekte vorhanden</Text>
+        }
+      />
+
+      <Pressable style={styles.logout} onPress={logoutHandler}>
+        <Text style={styles.logoutText}>Logout</Text>
+      </Pressable>
     </View>
   );
 }
@@ -135,19 +121,13 @@ const { logout } = useAuth();
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-  },
-  content: {
-    flex: 1,
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    padding: 20,
+    backgroundColor: colors.background,
   },
   title: {
     fontSize: 22,
     fontWeight: "600",
+    color: colors.textPrimary,
     marginBottom: 12,
   },
   row: {
@@ -158,20 +138,40 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
+    borderColor: colors.border,
+    borderRadius: 6,
+    padding: 12,
+    color: colors.textPrimary,
+  },
+  addButton: {
+    backgroundColor: colors.buttonPrimary,
+    borderRadius: 6,
+    paddingHorizontal: 16,
+    justifyContent: "center",
+  },
+  addButtonText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "600",
   },
   projectRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderBottomWidth: 1,
+    borderColor: colors.border,
   },
-  projectName: {
+  projectText: {
+    color: colors.textPrimary,
     fontSize: 16,
   },
-  logoutContainer: {
-    paddingTop: 12,
-    paddingBottom: 24, // ⬅️ hebt den Button sichtbar an
+  empty: {
+    color: colors.textSecondary,
+    marginTop: 20,
+  },
+  logout: {
+    marginBottom: 30,
+  },
+  logoutText: {
+    color: colors.danger,
+    fontWeight: "500",
   },
 });

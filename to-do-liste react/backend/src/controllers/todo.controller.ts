@@ -32,7 +32,7 @@ export const createTodo = async (req: Request, res: Response) => {
     await newTodo.save();
     res.status(201).json(newTodo);
 
-     io.to(`project:${projectId}`).emit("todo:created", newTodo); //Sende die neue Todo an alle Clients im entsprechenden Projekt-Raum
+     io.to(`project:${projectId}`).emit("todo:created", newTodo); //Sendet die neue Todo an alle Clients im entsprechenden Projekt-Raum
   } catch (error) {
     res.status(500).json({ error: "Interner Serverfehler." });
   }

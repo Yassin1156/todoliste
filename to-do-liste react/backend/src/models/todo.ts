@@ -18,4 +18,4 @@ const TodoSchema = new Schema<ITodo>({
   reminded: { type: Boolean, default: false },
 });
 
-export const Todo = mongoose.model<ITodo>("Todo", TodoSchema); //Das Model Todo wird exportiert, damit es in anderen Dateien verwendet werden kann. Dabei erstellt mongoose ein Collection namens "todos" in der Datenbank (automatisch im Plural).
+export const Todo = mongoose.model<ITodo>("Todo", TodoSchema); //Das Model Todo wird exportiert, damit es in anderen Dateien verwendet werden kann. Dabei erstellt mongoose eine Collection namens "todos" in der Datenbank (automatisch im Plural).

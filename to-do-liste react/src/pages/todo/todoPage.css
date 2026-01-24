@@ -1,14 +1,14 @@
-/* Seite neben der Sidebar */
+
 body{
   background-color: #f3f3f3;
 }
 
 
 .Todo {
-  margin-left: 220px;          /* Platz für Sidebar */
+  margin-left: 220px;          
   min-height: 100vh;
-  padding: 16px;       /* Weißer Hintergrund */
-  color: #111827;              /* Dunkler Text */
+  padding: 16px;       
+  color: #111827;              
   font:   Arial;
   width: 400px;
   transition: margin-left .3s ease;
@@ -21,8 +21,8 @@ body{
 
 .Todo-Header {
   display: flex;
-  align-items: center;   /* gleiche Höhe für Input, Buttons, Überschrift */
-  gap: 8px;              /* kleiner Abstand */
+  align-items: center;   
+  gap: 8px;              
   margin-bottom: 16px;
 }
 
@@ -32,20 +32,20 @@ body{
   width: 100%;
 }
 
-/* h1 soll Input ersetzen können, also gleiche Regeln */
+
 .Todo-Header h1 {
   display: flex;
   align-items: center;
-  flex: 1;               /* nimmt Platz ein, damit Buttons rechts gedrückt werden */
+  flex: 1;               
   font-size: 18px;
   font-weight: 600;
   margin: 0;
 }
 
-/* Eingabefeld im Header */
+
 .Todo-Header input {
   flex: 1;                          
-  height: 40px;          /* gleiche Höhe wie Buttons */
+  height: 40px;         
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 14px;
@@ -53,9 +53,9 @@ body{
   margin-right: 10px;
 }
 
-/* Buttons im Header */
+
 .Todo-Header button {
-  height: 40px;          /* gleiche Höhe wie Input */
+  height: 40px;          
   padding: 0 14px;
   border: none;
   border-radius: 6px;
@@ -63,30 +63,30 @@ body{
   color: #fff;
   font-size: 14px;
   font-weight: 500;
-  margin-left: auto;     /* schiebt Button ganz nach rechts */
+  margin-left: auto;    
 }
 
-/* Hover-Effekt */
+
 .Todo-Header button:hover {
   background: #2563eb;
 }
 
 
 
-/* Main */
+
 .Todo-main {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-/* Eingabezeile */
+
 .Todo-input {
   display: flex;
   gap: 8px;
 }
 
-/* Inputs */
+
 .Todo input {
   flex: 1;
   min-width: 0;
@@ -99,7 +99,7 @@ body{
 }
 .Todo input[type="text"]::placeholder { color: #9ca3af; }
 
-/* Buttons */
+
 .Todo button {
   padding: 8px 12px;
   border: none;
@@ -108,27 +108,26 @@ body{
   font-weight: 500;
 }
 
-/* Farbvarianten */
+
 .Todo-Header button,
 .Todo-input button {
-  background: #303030;   /* Blau */
+  background: #303030;  
   color: #ffffff;
 }
 .Todo-Header button:hover,
 .Todo-input button:hover {
-  background: #404040;   /* dunkleres Blau */
+  background: #404040;   
 }
 
-/* Delete-Button */
 .Todo-item button {
-  background: #ef4444;   /* Rot */
+  background: #ef4444;  
   color: #ffffff;
 }
 .Todo-item button:hover {
   background: #dc2626;
 }
 
-/* Todo-Liste */
+
 .Todo-list { 
   display: flex; 
   flex-direction: column; 
@@ -167,17 +166,17 @@ body{
 }
 
 .share-button {
-  align-self: center;           /* zentriert horizontal in Flex-Container */
+  align-self: center;           
   margin-top: auto;                  
-  border: none;                 /* kein Rand */
-  cursor: pointer;              /* Hand-Cursor */
-  display: flex;                /* für zentriertes Icon */
+  border: none;                
+  cursor: pointer;              
+  display: flex;                
   justify-content: center;
   align-items: center;
-  padding: 6px;                 /* etwas Klickfläche */
+  padding: 6px;                
 }
 
-/* Responsive: Sidebar wegschieben */
+
 @media (max-width: 900px) {
   .Todo { margin-left: 0; }
 }

@@ -3,7 +3,7 @@ import { getTodos, createTodo, deleteTodo, updateTodo } from "../controllers/tod
 import { authMiddleware } from "../middleware/auth.middleware";
 
 const router = Router();
-//router.use(authMiddleware);
+router.use(authMiddleware);
 
 router.get("/", getTodos);
 router.post("/", createTodo);

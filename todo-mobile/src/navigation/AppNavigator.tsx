@@ -13,7 +13,6 @@ import type { RootStackParamList } from "./types";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-/* ================= AUTH CONTEXT ================= */
 
 type AuthContextType = {
   login: () => void;
@@ -30,7 +29,6 @@ export function useAuth() {
   return ctx;
 }
 
-/* ================= NAVIGATOR ================= */
 
 export default function AppNavigator() {
   const [loading, setLoading] = useState(true);

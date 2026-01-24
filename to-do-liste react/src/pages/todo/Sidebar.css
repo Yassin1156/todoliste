@@ -4,8 +4,8 @@
   left: 0;
   width: 220px;
   height: 100vh;
-  background: #1e293b; /* dunkles Grau */
-  color: #f1f5f9; /* sehr helles Grau für Text */
+  background: #1e293b;
+  color: #f1f5f9; 
   transition: transform 0.3s ease;
 }
 
@@ -25,8 +25,8 @@
   justify-content: space-between;
   height: 80px;
   padding: 0 10px;
-  background: #3a3a3a; /* noch dunkleres Grau-Blau */
-  color: #f8fafc; /* fast weißer Text */
+  background: #3a3a3a;
+  color: #f8fafc; 
   box-sizing: border-box;
 }
 
@@ -36,7 +36,7 @@
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  background: #4a4a4a; /* gleiches Grundgrau */
+  background: #4a4a4a; 
   padding: 10px;
   box-sizing: border-box;
 }
@@ -45,20 +45,20 @@
 .suche {
   width: 100%;
   padding: 6px;
-  background: #334155; /* dunkler Input */
+  background: #334155; 
   border: 1px solid #475569;
   border-radius: 6px;
   color: #f1f5f9;
 }
 
 .suche::placeholder {
-  color: #94a3b8; /* hellgrau */
+  color: #94a3b8;
 }
 
-/* Buttons & Icons */
+
 .material-icons,
 .material-icons-outlined {
-  color: #f1f5f9; /* helle Icons */
+  color: #f1f5f9; 
   font-size: 24px;
   vertical-align: middle;
 }
@@ -72,11 +72,11 @@
 
 .project-list {
   flex: 1;
-  min-height: 0;           /* <-- ebenfalls wichtig */
-  overflow-y: auto;        /* aktiviert Scrollbar */
-  list-style: none;        /* Punkte weg */
+  min-height: 0;         
+  overflow-y: auto;        
+  list-style: none;       
   margin: 1rem 0 0;
-  padding: 0;      /* verhindert überlaufen */
+  padding: 0;      
 }
 
 
@@ -91,10 +91,10 @@
 }
 
 .sidebar-footer {
-  margin-top: auto; /* schiebt Footer nach unten */
+  margin-top: auto;
   display: flex;
-  justify-content: center; /* zentriert horizontal */
-  padding: 20px 0; /* noch dunkleres Grau-Blau */
+  justify-content: center;
+  padding: 20px 0; 
   background-color: #4a4a4a;
 }
 

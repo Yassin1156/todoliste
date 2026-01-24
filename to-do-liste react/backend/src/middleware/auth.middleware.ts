@@ -23,7 +23,7 @@ export const authMiddleware = (
     return res.status(401).json({ error: "Kein Token angegeben." });
   }
 
-  const token = authHeader.slice(7); // "Bearer ".length
+  const token = authHeader.slice(7); 
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;

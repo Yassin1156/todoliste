@@ -14,7 +14,7 @@ if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
       .register("/sw.js")
-      .then(() => console.log("✅ Service Worker registered"))
-      .catch((err) => console.error("❌ SW register failed", err));
+      .then(() => console.log("Push ist aktiviert"))
+      .catch((err) => console.error("Push konnte nicht aktiviert werden:", err));
   });
 }

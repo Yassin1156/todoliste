@@ -57,7 +57,7 @@ export function TodoPage({
       setProjectName("");
       console.log("Projekt hinzugefügt:", newProject);
       setIsProjectSelected(true);
-      setCurrentProjectIndex(projects.length); // Neuer Index ist am Ende der Liste
+      setCurrentProjectIndex(projects.length); 
 
     } catch (error) {
       console.error("Fehler beim Hinzufügen des Projekts:", error);

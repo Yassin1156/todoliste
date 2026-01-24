@@ -14,35 +14,35 @@
   text-align: center;
 }
 
-/* Container (optional) */
+
 .filter-optionen {
-  font-size: 16px; /* steuert zugleich die Checkbox-Größe (1em) */
+  font-size: 16px; 
 }
 
-/* Liste ohne Punkte + sauberer Abstand */
+
 .filter-optionen ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px; /* Abstand zwischen Zeilen */
+  gap: 8px; 
   margin-bottom: 10px;
 }
 
-/* Zeilen: Checkbox + Text perfekt ausrichten */
+
 .filter-optionen li {
   display: flex;
-  align-items: center;   /* vertikal zentriert */
-  gap: 0.6rem;           /* Abstand zwischen Box und Text */
+  align-items: center;   
+  gap: 0.6rem;           
   line-height: 1.2;
 }
 
-/* Checkbox auf Textgröße bringen und sauber ausrichten */
+
 .filter-optionen input[type="checkbox"] {
-  inline-size: 1em;      /* Breite = Schriftgröße */
-  block-size: 1em;       /* Höhe = Schriftgröße */
-  margin: 0;             /* kein zusätzlicher Offset */
-  accent-color: #3b82f6; /* (optional) Farbe der Checkbox */
+  inline-size: 1em;      
+  block-size: 1em;      
+  margin: 0;             
+  accent-color: #3b82f6; 
 }
 

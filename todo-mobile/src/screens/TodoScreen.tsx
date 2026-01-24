@@ -2,7 +2,6 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   FlatList,
   StyleSheet,
   Pressable,
@@ -12,6 +11,7 @@ import { useEffect, useState } from "react";
 import { api } from "../api/client";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
+import { colors } from "../theme/colors";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Todos">;
 
@@ -26,7 +26,6 @@ export default function TodosScreen({ route, navigation }: Props) {
 
   const [todos, setTodos] = useState<Todo[]>([]);
   const [todoText, setTodoText] = useState("");
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     navigation.setOptions({ title: projectName });
@@ -41,8 +40,6 @@ export default function TodosScreen({ route, navigation }: Props) {
       setTodos(res.data);
     } catch {
       Alert.alert("Fehler", "Todos konnten nicht geladen werden");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -85,17 +82,9 @@ const addTodo = async () => {
     }
   };
 
-  if (loading) {
-    return (
-      <View style={styles.center}>
-        <Text>Lade Todos…</Text>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
-      {/* Eingabe */}
       <View style={styles.row}>
         <TextInput
           style={styles.input}
@@ -103,22 +92,20 @@ const addTodo = async () => {
           value={todoText}
           onChangeText={setTodoText}
         />
-        <Button title="+" onPress={addTodo} />
+        <Pressable style={styles.addButton} onPress={addTodo}>
+          <Text style={styles.addButtonText}>+</Text>
+        </Pressable>
       </View>
 
-      {/* Todo-Liste */}
       <FlatList
         data={todos}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={styles.todoRow}>
-            <Pressable
-              style={styles.checkbox}
-              onPress={() => toggleTodo(item)}
-            >
-              <Text>{item.done ? "☑️" : "⬜️"}</Text>
-            </Pressable>
-
+          <Pressable
+            style={styles.todoRow}
+            onPress={() => toggleTodo(item)}
+            onLongPress={() => deleteTodo(item.id)}
+          >
             <Text
               style={[
                 styles.todoText,
@@ -127,22 +114,12 @@ const addTodo = async () => {
             >
               {item.content}
             </Text>
-
-            <Pressable onPress={() => deleteTodo(item.id)}>
-              <Text style={styles.delete}>✖</Text>
-            </Pressable>
-          </View>
+          </Pressable>
         )}
-        ListEmptyComponent={<Text>Keine Todos vorhanden</Text>}
+        ListEmptyComponent={
+          <Text style={styles.empty}>Keine Todos vorhanden</Text>
+        }
       />
-
-      {/* Projekt wechseln */}
-      <View style={styles.footer}>
-        <Button
-          title="Projekt wechseln"
-          onPress={() => navigation.goBack()}
-        />
-      </View>
     </View>
   );
 }
@@ -150,12 +127,8 @@ const addTodo = async () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    padding: 20,
+    backgroundColor: colors.background,
   },
   row: {
     flexDirection: "row",
@@ -165,35 +138,37 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 10,
+    borderColor: colors.border,
+    borderRadius: 6,
+    padding: 12,
+    color: colors.textPrimary,
+  },
+  addButton: {
+    backgroundColor: colors.buttonPrimary,
+    borderRadius: 6,
+    paddingHorizontal: 16,
+    justifyContent: "center",
+  },
+  addButtonText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "600",
   },
   todoRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
+    paddingVertical: 14,
     borderBottomWidth: 1,
-    gap: 10,
-  },
-  checkbox: {
-    width: 30,
-    alignItems: "center",
+    borderColor: colors.border,
   },
   todoText: {
-    flex: 1,
     fontSize: 16,
+    color: colors.textPrimary,
   },
   todoDone: {
     textDecorationLine: "line-through",
-    color: "#888",
+    color: colors.textSecondary,
   },
-  delete: {
-    color: "red",
-    fontSize: 16,
-    paddingHorizontal: 6,
-  },
-  footer: {
-    paddingTop: 12,
-    paddingBottom: 24,
+  empty: {
+    color: colors.textSecondary,
+    marginTop: 20,
   },
 });

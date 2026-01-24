@@ -1,6 +1,6 @@
 import api from "../api/client";
 
-// Base64 -> Uint8Array (für applicationServerKey)
+// Sorgt dafür, dass der Vapid Public Key in ein Uint8Array umgewandelt wird, sodass die push API ihn nutzen kann
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
@@ -11,7 +11,7 @@ function urlBase64ToUint8Array(base64String: string) {
 }
 
 export async function subscribeToPush(publicVapidKey: string) {
-  if (!("serviceWorker" in navigator)) {
+  if (!("serviceWorker" in navigator)) {  // Prüft ob der Browser Push unterstützt
     console.warn("Service Worker nicht verfügbar");
     return;
   }
@@ -28,10 +28,9 @@ export async function subscribeToPush(publicVapidKey: string) {
 
   const registration = await navigator.serviceWorker.ready;
 
-  // schon subscribed?
+ 
   const existing = await registration.pushManager.getSubscription();
   if (existing) {
-    // trotzdem ans Backend schicken (Backend kann upsert machen)
     await api.post("/push/subscribe", existing);
     return;
   }
@@ -42,5 +41,5 @@ export async function subscribeToPush(publicVapidKey: string) {
   });
 
   await api.post("/push/subscribe", subscription);
-  console.log("✅ Push subscribed");
+  console.log("Push Registrqierung erfolgreich:");
 }

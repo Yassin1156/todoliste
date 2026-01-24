@@ -35,7 +35,6 @@ export function ProjectPage({
     { id: string; content: string; done: boolean; deadline: string }[]
   >([]);
 
-  const notificationTimers = useRef<Record<string, number>>({});
 
   //  const currentAccount = accounts[currentAccountIndex];
   // const projects = currentAccount ? currentAccount.projects : [];
@@ -51,71 +50,10 @@ export function ProjectPage({
     : window.location.href;
 
   // in ProjectPage.tsx
-  useEffect(() => {
-    if (!("Notification" in window)) {
-      console.warn("Browser unterstützt keine Notifications");
-      return;
-    }
+  
 
-    if (Notification.permission === "default") {
-      // user wurde noch nicht gefragt
-      Notification.requestPermission().then((permission) => {
-        console.log("Notification permission:", permission);
-      });
-    }
-  }, []);
 
-  const scheduleNotificationForTodo = (todo: {
-    id: string;
-    content: string;
-    done: boolean;
-    deadline: string;
-  }) => {
-    if (!("Notification" in window)) return;
-    if (Notification.permission !== "granted") return;
-    if (todo.done) return;
 
-    // alten Timer löschen
-    const existing = notificationTimers.current[todo.id];
-    if (existing) clearTimeout(existing);
-
-    const now = dayjs();
-    const deadline = dayjs(todo.deadline);
-    const diffMs = deadline.diff(now, "millisecond");
-
-    console.log("Scheduling notification in", diffMs, "ms for", todo.content);
-
-    if (diffMs <= 0) return;
-
-    const timeoutId = window.setTimeout(() => {
-      console.log("🔥 Notification fired:", todo.content);
-
-      new Notification("⏰ Todo Erinnerung", {
-        body: todo.content,
-      });
-
-      delete notificationTimers.current[todo.id];
-    }, diffMs);
-
-    notificationTimers.current[todo.id] = timeoutId;
-  };
-
-  const cancelNotificationForTodo = (todoId: string) => {
-    const timeoutId = notificationTimers.current[todoId];
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-      delete notificationTimers.current[todoId];
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      Object.values(notificationTimers.current).forEach((timeoutId) => {
-        clearTimeout(timeoutId);
-      });
-      notificationTimers.current = {};
-    };
-  }, []);
 
   useEffect(() => {
     async function fetchTodos() {
@@ -124,18 +62,7 @@ export function ProjectPage({
           params: { projectId: id },
         });
         setTodos(res.data);
-
-        // Benachrichtigungen für alle geladenen Todos planen
-        res.data.forEach(
-          (todo: {
-            id: string;
-            content: string;
-            done: boolean;
-            deadline: string;
-          }) => {
-            scheduleNotificationForTodo(todo);
-          }
-        );
+        
       } catch (error) {
         console.error("Fehler beim Laden der Todos:", error);
       }
@@ -176,15 +103,12 @@ export function ProjectPage({
     });
 
     socket.on("todo:created", (newTodo) => {
-      console.log("event todo:created", newTodo);
       setTodos((prev) => {
-        // wenn Todo schon existiert → nichts tun
         if (prev.some((t) => t.id === newTodo.id)) {
           return prev;
         }
         return [...prev, newTodo];
       });
-      scheduleNotificationForTodo(newTodo);
     });
 
     socket.on("todo:updated", (updatedTodo) => {
@@ -192,19 +116,11 @@ export function ProjectPage({
       setTodos((prev) =>
         prev.map((t) => (t.id === updatedTodo.id ? updatedTodo : t))
       );
-      if (updatedTodo.done) {
-        // erledigt → Erinnerung löschen
-        cancelNotificationForTodo(updatedTodo.id);
-      } else {
-        // wieder offen → neu planen
-        scheduleNotificationForTodo(updatedTodo);
-      }
     });
 
     socket.on("todo:deleted", (deletedTodo) => {
       console.log("event todo:deleted", deletedTodo);
       setTodos((prev) => prev.filter((t) => t.id !== deletedTodo.id));
-      cancelNotificationForTodo(deletedTodo.id);
     });
 
     socket.on("disconnect", () => {
@@ -232,6 +148,7 @@ export function ProjectPage({
       const newTodo = res.data;
 
       console.log("Todo hinzugefügt:", newTodo);
+      console.log("deadline:", deadline);
     } catch (error) {
       console.error("Fehler beim Hinzufügen des Todos:", error);
     }
